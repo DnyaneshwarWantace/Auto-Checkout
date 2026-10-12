@@ -11,7 +11,7 @@
     "lint": "eslint src/"
   },
   "dependencies": {
-    "@aco/shared": "workspace:*"
+    "@aco/shared": "*"
   },
   "devDependencies": {
     "typescript": "^5.5.0"

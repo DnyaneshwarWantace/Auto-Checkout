@@ -2,6 +2,9 @@ import fp from 'fastify-plugin'
 import { createHash, randomBytes } from 'crypto'
 import bcrypt from 'bcryptjs'
 import { authenticator } from 'otplib'
+import { eq } from 'drizzle-orm'
+import { apiKeys } from '@aco/db'
+import type { Database } from '@aco/db'
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 
 declare module 'fastify' {
@@ -20,13 +23,14 @@ declare module 'fastify' {
   }
 }
 
-export default fp(async function authPlugin(app: FastifyInstance) {
+export default function authPlugin(db: Database) {
+  return fp(async function auth(app: FastifyInstance) {
   app.decorateRequest('tenantId', '')
   app.decorateRequest('userId', '')
   app.decorateRequest('userRole', '')
 
   app.addHook('preHandler', async (req: FastifyRequest, reply: FastifyReply) => {
-    if (req.url.startsWith('/v1/auth/')) return
+    if (req.url.startsWith('/v1/auth/') || req.url === '/health') return
 
     const authHeader = req.headers.authorization
     if (!authHeader?.startsWith('Bearer ')) {
@@ -37,10 +41,6 @@ export default fp(async function authPlugin(app: FastifyInstance) {
 
     if (token.startsWith('aco_')) {
       const hashed = createHash('sha256').update(token).digest('hex')
-      const { createDb } = await import('@aco/db')
-      const db = createDb(process.env.DATABASE_URL!)
-      const { apiKeys } = await import('@aco/db')
-      const { eq } = await import('drizzle-orm')
       const keys = await db.select().from(apiKeys).where(eq(apiKeys.hashedKey, hashed)).limit(1)
       if (keys.length === 0) return reply.code(401).send({ error: 'Invalid API key' })
       req.tenantId = keys[0].tenantId
@@ -67,4 +67,5 @@ export default fp(async function authPlugin(app: FastifyInstance) {
   app.decorate('verifyTotp', (token: string, secret: string) =>
     authenticator.verify({ token, secret }),
   )
-})
+  })
+}

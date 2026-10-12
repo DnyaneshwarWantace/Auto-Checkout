@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "xstate": "^5.0.0",
-    "@aco/shared": "workspace:*",
-    "@aco/db": "workspace:*",
-    "@aco/queue": "workspace:*"
+    "@aco/shared": "*",
+    "@aco/db": "*",
+    "@aco/queue": "*"
   },
   "devDependencies": {
     "typescript": "^5.5.0"

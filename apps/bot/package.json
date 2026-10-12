@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "discord.js": "^14.0.0",
-    "@aco/shared": "workspace:*",
-    "@aco/queue": "workspace:*"
+    "@aco/shared": "*",
+    "@aco/queue": "*"
   },
   "devDependencies": {
     "typescript": "^5.5.0"

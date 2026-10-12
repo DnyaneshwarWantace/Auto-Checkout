@@ -21,11 +21,14 @@
     "pino": "^9.3.0",
     "zod": "^3.23.0",
     "@aco/db": "*",
-    "@aco/shared": "*"
+    "@aco/shared": "*",
+    "drizzle-orm": "^0.38.0",
+    "fastify-plugin": "^4.5.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "tsx": "^4.17.0",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "pino-pretty": "^11.2.0"
   }
 }

@@ -1,13 +1,20 @@
 import type { FastifyPluginAsync } from 'fastify'
 import { eq, and, desc } from 'drizzle-orm'
 import { CreateTaskSchema, PaginationSchema } from '@aco/shared'
-import { checkoutTasks, checkoutEvents } from '@aco/db'
+import { checkoutTasks, checkoutEvents, profiles } from '@aco/db'
 import type { Database } from '@aco/db'
 
 export default function taskRoutes(db: Database): FastifyPluginAsync {
   return async (app) => {
     app.post('/', async (req, reply) => {
       const body = CreateTaskSchema.parse(req.body)
+
+      const [profile] = await db
+        .select({ id: profiles.id })
+        .from(profiles)
+        .where(and(eq(profiles.id, body.profileId), eq(profiles.tenantId, req.tenantId)))
+        .limit(1)
+      if (!profile) return reply.code(404).send({ error: 'Profile not found' })
 
       const [task] = await db
         .insert(checkoutTasks)

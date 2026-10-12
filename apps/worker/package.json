@@ -13,9 +13,9 @@
   "dependencies": {
     "bullmq": "^5.0.0",
     "ioredis": "^5.4.0",
-    "@aco/engine": "workspace:*",
-    "@aco/queue": "workspace:*",
-    "@aco/shared": "workspace:*"
+    "@aco/engine": "*",
+    "@aco/queue": "*",
+    "@aco/shared": "*"
   },
   "devDependencies": {
     "typescript": "^5.5.0"

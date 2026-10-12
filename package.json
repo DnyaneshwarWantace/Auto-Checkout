@@ -1,7 +1,10 @@
 {
   "name": "aco",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -16,7 +19,8 @@
     "prettier": "^3.3.0",
     "eslint": "^9.10.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0"
+    "@typescript-eslint/parser": "^8.0.0",
+    "drizzle-orm": "^0.38.0"
   },
   "packageManager": "npm@10.9.4",
   "engines": {

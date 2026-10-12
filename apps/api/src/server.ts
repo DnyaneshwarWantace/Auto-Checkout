@@ -33,14 +33,17 @@ export async function buildApp() {
     secret: process.env.JWT_SECRET!,
   })
 
+  app.addContentTypeParser('text/plain', { parseAs: 'string' }, (_req, body, done) => done(null, body))
+  app.addContentTypeParser('text/csv', { parseAs: 'string' }, (_req, body, done) => done(null, body))
+
   await app.register(rateLimit, {
     max: 100,
     timeWindow: '1 minute',
   })
 
-  await app.register(authPlugin)
-
   const db = createDb(process.env.DATABASE_URL!)
+
+  await app.register(authPlugin(db))
 
   await app.register(authRoutes(db), { prefix: '/v1/auth' })
   await app.register(profileRoutes(db), { prefix: '/v1/profiles' })

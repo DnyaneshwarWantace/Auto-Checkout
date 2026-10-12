@@ -11,9 +11,9 @@
     "lint": "eslint src/"
   },
   "dependencies": {
-    "@aco/browser": "workspace:*",
-    "@aco/shared": "workspace:*",
-    "@aco/payment": "workspace:*"
+    "@aco/browser": "*",
+    "@aco/shared": "*",
+    "@aco/payment": "*"
   },
   "devDependencies": {
     "typescript": "^5.5.0"

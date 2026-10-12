@@ -14,7 +14,7 @@
     "next": "^14.0.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "@aco/shared": "workspace:*"
+    "@aco/shared": "*"
   },
   "devDependencies": {
     "typescript": "^5.5.0"
