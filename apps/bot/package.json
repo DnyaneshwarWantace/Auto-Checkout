@@ -1,0 +1,21 @@
+{
+  "name": "@aco/bot",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "discord.js": "^14.0.0",
+    "@aco/shared": "workspace:*",
+    "@aco/queue": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

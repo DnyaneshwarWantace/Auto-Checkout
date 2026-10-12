@@ -1,0 +1,22 @@
+{
+  "name": "@aco/engine",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "xstate": "^5.0.0",
+    "@aco/shared": "workspace:*",
+    "@aco/db": "workspace:*",
+    "@aco/queue": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

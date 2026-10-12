@@ -1,2 +1,11 @@
 .DS_Store
 Thumbs.db
+node_modules/
+dist/
+.turbo/
+*.log
+.env
+.env.*
+!.env.example
+coverage/
+.nyc_output/

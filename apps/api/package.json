@@ -1,0 +1,31 @@
+{
+  "name": "@aco/api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/main.ts",
+    "start": "node dist/main.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "fastify": "^4.28.0",
+    "@fastify/cors": "^9.0.0",
+    "@fastify/jwt": "^8.0.0",
+    "@fastify/rate-limit": "^9.1.0",
+    "bcryptjs": "^2.4.3",
+    "otplib": "^12.0.1",
+    "ioredis": "^5.4.0",
+    "pino": "^9.3.0",
+    "zod": "^3.23.0",
+    "@aco/db": "*",
+    "@aco/shared": "*"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "tsx": "^4.17.0",
+    "typescript": "^5.5.0"
+  }
+}

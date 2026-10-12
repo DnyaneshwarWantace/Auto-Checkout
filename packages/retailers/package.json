@@ -1,0 +1,21 @@
+{
+  "name": "@aco/retailers",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@aco/browser": "workspace:*",
+    "@aco/shared": "workspace:*",
+    "@aco/payment": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}
