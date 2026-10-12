@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ACO Platform — Complete Developer Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#1c2128;--bg4:#21262d;
+  --border:#21262d;--border2:#30363d;
+  --text:#e6edf3;--text2:#8b949e;--text3:#6e7681;
+  --blue:#58a6ff;--blue-dim:rgba(88,166,255,.1);--blue-border:rgba(88,166,255,.25);
+  --green:#3fb950;--green-dim:rgba(63,185,80,.1);--green-border:rgba(63,185,80,.25);
+  --yellow:#e3b341;--yellow-dim:rgba(227,179,65,.1);--yellow-border:rgba(227,179,65,.25);
+  --red:#f85149;--red-dim:rgba(248,81,73,.1);--red-border:rgba(248,81,73,.25);
+  --purple:#d2a8ff;--purple-dim:rgba(210,168,255,.1);
+  --cyan:#79c0ff;--orange:#ffa657;--pink:#ff7b72;
+  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.7;-webkit-font-smoothing:antialiased}
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.wrap{display:flex;min-height:100vh}
+.nav{width:260px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;background:var(--bg2);border-right:1px solid var(--border);font-size:12px}
+.nav::-webkit-scrollbar{width:4px}.nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.nav-top{padding:20px 16px 16px;border-bottom:1px solid var(--border)}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--blue);letter-spacing:-.01em}
+.nav-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.nav-section{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;padding:14px 16px 4px}
+.nav a{display:flex;align-items:center;gap:8px;padding:4px 16px;color:var(--text2);text-decoration:none;border-left:2px solid transparent;transition:all .1s;line-height:1.5}
+.nav a:hover{color:var(--text);background:var(--bg3)}
+.nav a.on{color:var(--blue);border-left-color:var(--blue);background:var(--blue-dim)}
+.nav a .lv2{padding-left:12px;color:var(--text3);font-size:11px}
+.nav a .lv2:hover{color:var(--text2)}
+.nav .tag{font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:3px;background:var(--bg4);border:1px solid var(--border2);color:var(--text3);margin-left:auto}
+.main{margin-left:260px;flex:1;padding:48px 52px 140px;max-width:980px}
+
+/* ── TYPE ────────────────────────────────────────────────────── */
+.pg-title{font-size:28px;font-weight:600;letter-spacing:-.025em;line-height:1.2;margin-bottom:10px}
+.pg-sub{font-size:15px;color:var(--text2);max-width:64ch;line-height:1.6;margin-bottom:24px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.chip{font-family:var(--mono);font-size:10px;padding:3px 9px;border-radius:4px;border:1px solid var(--border2);color:var(--text2)}
+.chip.blue{color:var(--blue);border-color:var(--blue-border);background:var(--blue-dim)}
+.chip.green{color:var(--green);border-color:var(--green-border);background:var(--green-dim)}
+
+section{margin-bottom:72px;scroll-margin-top:28px}
+.s-label{font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+h2{font-size:20px;font-weight:600;letter-spacing:-.015em;margin-bottom:20px}
+h3{font-size:14px;font-weight:600;color:var(--text);margin:28px 0 12px}
+h3:first-child{margin-top:0}
+h4{font-family:var(--mono);font-size:12px;color:var(--text2);margin:20px 0 8px}
+p{color:var(--text2);margin-bottom:12px;max-width:74ch}
+
+/* ── CODE ────────────────────────────────────────────────────── */
+.code-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;margin:12px 0;overflow:hidden}
+.code-head{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.code-head .file{font-family:var(--mono);font-size:11px;color:var(--text2)}
+.code-head .lang{font-family:var(--mono);font-size:10px;color:var(--text3)}
+pre{padding:16px;overflow-x:auto;margin:0}
+pre code{font-family:var(--mono);font-size:12px;line-height:1.65;color:var(--text2)}
+:not(pre)>code{font-family:var(--mono);font-size:11px;background:var(--bg3);border:1px solid var(--border2);padding:1px 5px;border-radius:3px;color:var(--purple)}
+
+/* syntax */
+.k{color:var(--pink)} .s{color:var(--blue)} .fn{color:var(--purple)} .t{color:var(--orange)}
+.n{color:var(--cyan)} .c{color:var(--text3);font-style:italic} .p{color:var(--green)} .x{color:var(--text2)}
+
+/* ── TABLES ──────────────────────────────────────────────────── */
+.tbl-wrap{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:8px 12px;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+td b{color:var(--text);font-weight:500}
+td code{font-size:11px}
+
+/* ── CARDS / CALLOUTS ────────────────────────────────────────── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px 20px;margin:12px 0}
+.note{background:var(--yellow-dim);border:1px solid var(--yellow-border);border-radius:5px;padding:12px 15px;font-size:13px;color:var(--text2);margin:14px 0}
+.note b{color:var(--yellow)}
+.danger{background:var(--red-dim);border:1px solid var(--red-border);border-radius:5px;padding:12px 15px;font-size:13px;color:var(--text2);margin:14px 0}
+.danger b{color:var(--red)}
+.tip{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:5px;padding:12px 15px;font-size:13px;color:var(--text2);margin:14px 0}
+.tip b{color:var(--blue)}
+
+/* ── FILE TREE ───────────────────────────────────────────────── */
+.tree{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px 18px;font-family:var(--mono);font-size:12px;line-height:2}
+.tree .d{color:var(--blue)} .tree .f{color:var(--text2)} .tree .cm{color:var(--text3)} .tree .hi{color:var(--green)}
+
+/* ── PHASE BANNER ────────────────────────────────────────────── */
+.phase{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:28px;display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start}
+.phase-n{font-family:var(--mono);font-size:36px;font-weight:600;color:var(--border2);line-height:1}
+.phase-name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px}
+.phase-wk{font-family:var(--mono);font-size:11px;color:var(--yellow);margin-bottom:8px}
+.phase-desc{font-size:13px;color:var(--text2);max-width:62ch;line-height:1.6}
+.phase-tags{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+
+/* ── FLOW / STATE ────────────────────────────────────────────── */
+.flow{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin:12px 0}
+.flow-title{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:10px}
+.states{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:6px}
+.st{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);color:var(--text2);white-space:nowrap}
+.st.b{color:var(--blue);border-color:var(--blue-border);background:var(--blue-dim)}
+.st.g{color:var(--green);border-color:var(--green-border);background:var(--green-dim)}
+.st.y{color:var(--yellow);border-color:var(--yellow-border);background:var(--yellow-dim)}
+.st.r{color:var(--red);border-color:var(--red-border);background:var(--red-dim)}
+.arr{color:var(--text3);font-size:12px}
+
+/* ── CHECKLIST ───────────────────────────────────────────────── */
+.cl{list-style:none;margin:10px 0}
+.cl li{display:flex;align-items:baseline;gap:10px;padding:5px 0;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border)}
+.cl li:last-child{border-bottom:none}
+.cl li::before{content:'☐';font-family:var(--mono);font-size:11px;color:var(--text3);flex-shrink:0}
+.cl li b{color:var(--text);font-weight:500}
+
+/* ── GRID ────────────────────────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.mc{background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:14px}
+.mc-t{font-family:var(--mono);font-size:11px;color:var(--blue);margin-bottom:8px;font-weight:600}
+.mc ul{list-style:none}.mc li{font-size:12px;color:var(--text2);padding:2px 0 2px 12px;position:relative}
+.mc li::before{content:'›';position:absolute;left:0;color:var(--text3)}
+
+/* ── SPRINT ──────────────────────────────────────────────────── */
+.sprint-row{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:start}
+.sprint-row:last-child{border-bottom:none}
+.sw{font-family:var(--mono);font-size:11px;color:var(--yellow);padding-top:2px}
+.sd{font-size:13px;color:var(--text2)}.sd b{color:var(--text);display:block;margin-bottom:3px}
+
+hr{border:none;border-top:1px solid var(--border);margin:52px 0}
+@media(max-width:768px){.nav{display:none}.main{margin-left:0;padding:28px 20px 80px}.g2,.g3{grid-template-columns:1fr}.phase{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ═══ SIDEBAR ════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-top">
+    <div class="nav-logo">ACO Platform</div>
+    <div class="nav-sub">Complete Developer Reference</div>
+  </div>
+  <div class="nav-section">Setup</div>
+  <a href="#stack">Tech Stack</a>
+  <a href="#repo">Repo &amp; Folder Structure</a>
+  <a href="#env">Environment &amp; Docker</a>
+  <a href="#ci">CI / CD Pipeline</a>
+
+  <div class="nav-section">Phases</div>
+  <a href="#p1">Phase 1 — Foundation <span class="tag">Wk 1–4</span></a>
+  <a href="#p1-db" class="lv2">  Database Schema</a>
+  <a href="#p1-auth" class="lv2">  Auth System</a>
+  <a href="#p1-api" class="lv2">  Core API</a>
+  <a href="#p2">Phase 2 — Checkout Engine <span class="tag">Wk 5–9</span></a>
+  <a href="#p2-sm" class="lv2">  State Machine</a>
+  <a href="#p2-queue" class="lv2">  Queue (BullMQ)</a>
+  <a href="#p2-worker" class="lv2">  Worker Supervisor</a>
+  <a href="#p3">Phase 3 — Browser Layer <span class="tag">Wk 8–12</span></a>
+  <a href="#p3-session" class="lv2">  Session Factory</a>
+  <a href="#p3-stealth" class="lv2">  Stealth / Fingerprint</a>
+  <a href="#p3-proxy" class="lv2">  Proxy Manager</a>
+  <a href="#p3-captcha" class="lv2">  CAPTCHA Pipeline</a>
+  <a href="#p4">Phase 4 — Payments <span class="tag">Wk 10–13</span></a>
+  <a href="#p4-vault" class="lv2">  Card Vault</a>
+  <a href="#p4-cycling" class="lv2">  Card Cycling</a>
+  <a href="#p5">Phase 5 — Retailers <span class="tag">Wk 12–22</span></a>
+  <a href="#p5-adapter" class="lv2">  Adapter Interface</a>
+  <a href="#p5-seq" class="lv2">  Build Sequence</a>
+  <a href="#p5-example" class="lv2">  Example Adapter</a>
+  <a href="#p6">Phase 6 — Interfaces <span class="tag">Wk 18–25</span></a>
+  <a href="#p6-discord" class="lv2">  Discord Bot</a>
+  <a href="#p6-web" class="lv2">  Web Dashboard</a>
+  <a href="#p6-api" class="lv2">  External API</a>
+  <a href="#p6-webhooks" class="lv2">  Webhooks</a>
+  <a href="#p7">Phase 7 — SaaS Layer <span class="tag">Wk 20–28</span></a>
+  <a href="#p7-tenancy" class="lv2">  Multi-Tenancy</a>
+  <a href="#p7-billing" class="lv2">  Stripe Billing</a>
+
+  <div class="nav-section">Reference</div>
+  <a href="#monitoring">Logging &amp; Monitoring</a>
+  <a href="#security">Security Checklist</a>
+  <a href="#sprint">Sprint Plan</a>
+  <a href="#risks">Technical Risks</a>
+</nav>
+
+<!-- ═══ MAIN ════════════════════════════════════════════════════ -->
+<main class="main">
+
+<div class="pg-title">ACO Platform<br>Complete Developer Reference</div>
+<div class="pg-sub">Everything needed to build the Automated Checkout Operations platform — folder structure, schemas, contracts, implementation code, and sprint assignments for every module.</div>
+<div class="chips">
+  <span class="chip blue">Node.js 20 LTS</span><span class="chip blue">TypeScript 5</span>
+  <span class="chip blue">Fastify 4</span><span class="chip blue">Next.js 14</span>
+  <span class="chip blue">BullMQ + Redis 7</span><span class="chip blue">PostgreSQL 16 + Drizzle</span>
+  <span class="chip blue">Playwright + Stealth</span><span class="chip blue">discord.js v14</span>
+  <span class="chip blue">Stripe</span><span class="chip blue">Docker / Turborepo</span>
+  <span class="chip green">14 Retailers</span><span class="chip green">~28–32 weeks</span>
+</div>
+
+<!-- ═══════════════════════════════════ TECH STACK -->
+<section id="stack">
+<div class="s-label">Setup</div>
+<h2>Tech Stack Decisions</h2>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Layer</th><th>Choice</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td><b>Runtime</b></td><td><code>Node.js 20 LTS</code></td><td>Consistent across all services; async I/O is ideal for headless browser + queue workloads</td></tr>
+<tr><td><b>Language</b></td><td><code>TypeScript 5</code> strict mode</td><td>Typed adapter contracts catch integration bugs at compile time across 14 retailer modules</td></tr>
+<tr><td><b>Monorepo</b></td><td><code>Turborepo</code></td><td>Shared tsconfig/eslint, incremental builds, local package linking without publishing</td></tr>
+<tr><td><b>API server</b></td><td><code>Fastify 4</code></td><td>JSON schema validation built-in, 2× faster than Express, plugin ecosystem for auth/rate-limiting</td></tr>
+<tr><td><b>Web dashboard</b></td><td><code>Next.js 14</code> App Router</td><td>RSC for server-rendered pages; client components + React Query for live task feed</td></tr>
+<tr><td><b>Queue</b></td><td><code>BullMQ</code></td><td>Priority queues, per-queue concurrency limits, delayed jobs, exponential backoff — all native</td></tr>
+<tr><td><b>Database</b></td><td><code>PostgreSQL 16</code> + <code>Drizzle ORM</code></td><td>Typed queries, migration management, no Prisma overhead</td></tr>
+<tr><td><b>Conn. pool</b></td><td><code>PgBouncer</code> (transaction mode)</td><td>Workers create many short-lived DB connections; PgBouncer prevents PG running out</td></tr>
+<tr><td><b>Cache / Queue DB</b></td><td><code>Redis 7</code></td><td>BullMQ backend, rate-limit counters, session cache, proxy health state, order lock</td></tr>
+<tr><td><b>Browser</b></td><td><code>Playwright</code> + <code>playwright-extra</code> + stealth</td><td>Multi-browser support, good CDP access for fingerprint injection</td></tr>
+<tr><td><b>CAPTCHA</b></td><td><code>2captcha</code> primary / <code>CapSolver</code> fallback</td><td>Both support reCAPTCHA v2/v3, hCaptcha, Turnstile, Arkose</td></tr>
+<tr><td><b>Discord</b></td><td><code>discord.js v14</code></td><td>Slash commands, embeds, DM support, interaction collectors</td></tr>
+<tr><td><b>Logging</b></td><td><code>Pino</code> → <code>Grafana Loki</code></td><td>Structured JSON; query by tenant_id / task_id / worker_id in Grafana</td></tr>
+<tr><td><b>Metrics</b></td><td><code>prom-client</code> → <code>Prometheus</code> + <code>Grafana</code></td><td>Worker pool size, queue depth, checkout success/fail per retailer, retry rates</td></tr>
+<tr><td><b>Billing</b></td><td><code>Stripe</code> (subscriptions + metering)</td><td>Usage-based billing via Stripe Meters, webhook-driven tenant lifecycle</td></tr>
+<tr><td><b>Secrets</b></td><td><code>Doppler</code></td><td>Single source of truth across dev/staging/prod; prevents secrets in code or .env files</td></tr>
+<tr><td><b>Containers</b></td><td><code>Docker Compose</code> dev → <code>Docker Swarm</code> prod</td><td>Swarm handles worker service scaling without Kubernetes complexity</td></tr>
+<tr><td><b>CI/CD</b></td><td><code>GitHub Actions</code></td><td>Lint → typecheck → tests → build → deploy pipeline per service</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<!-- ═══════════════════════════════════ REPO STRUCTURE -->
+<section id="repo">
+<div class="s-label">Setup</div>
+<h2>Complete Repo &amp; Folder Structure</h2>
+<p>Turborepo monorepo. All inter-package imports use package names (not relative paths). Every package has its own <code>package.json</code>, <code>tsconfig.json</code> extending the root base.</p>
+
+<div class="tree">
+<span class="d">aco/</span><br>
+├── <span class="d">apps/</span><br>
+│   ├── <span class="d">api/</span>                   <span class="cm"># Fastify REST API + webhook dispatcher</span><br>
+│   │   ├── <span class="d">src/</span><br>
+│   │   │   ├── <span class="d">routes/</span>            <span class="cm"># auth, tasks, profiles, payments, proxies, orders, admin</span><br>
+│   │   │   ├── <span class="d">middleware/</span>        <span class="cm"># tenant-scope, rate-limit, api-key-auth, jwt-auth</span><br>
+│   │   │   ├── <span class="d">plugins/</span>           <span class="cm"># fastify-jwt, fastify-cors, fastify-rate-limit</span><br>
+│   │   │   ├── <span class="f">server.ts</span>          <span class="cm"># app factory + plugin registration</span><br>
+│   │   │   └── <span class="f">main.ts</span>            <span class="cm"># entry point</span><br>
+│   │   └── <span class="f">package.json</span><br>
+│   │<br>
+│   ├── <span class="d">web/</span>                   <span class="cm"># Next.js 14 App Router dashboard</span><br>
+│   │   ├── <span class="d">app/</span><br>
+│   │   │   ├── <span class="d">(auth)/</span>            <span class="cm"># login, register, 2fa pages</span><br>
+│   │   │   ├── <span class="d">dashboard/</span>         <span class="cm"># home — live task feed, stats</span><br>
+│   │   │   ├── <span class="d">tasks/</span>             <span class="cm"># task list, [id] detail + live state view</span><br>
+│   │   │   ├── <span class="d">profiles/</span>          <span class="cm"># CRUD profiles</span><br>
+│   │   │   ├── <span class="d">payments/</span>          <span class="cm"># card list, bulk upload</span><br>
+│   │   │   ├── <span class="d">proxies/</span>           <span class="cm"># proxy list, bulk upload, health view</span><br>
+│   │   │   ├── <span class="d">orders/</span>            <span class="cm"># order history</span><br>
+│   │   │   ├── <span class="d">settings/</span>          <span class="cm"># API keys, webhooks, notifications</span><br>
+│   │   │   └── <span class="d">admin/</span>             <span class="cm"># reseller panel — tenants, usage, billing</span><br>
+│   │   ├── <span class="d">components/</span>            <span class="cm"># shared UI components</span><br>
+│   │   └── <span class="f">package.json</span><br>
+│   │<br>
+│   ├── <span class="d">bot/</span>                   <span class="cm"># discord.js v14 bot</span><br>
+│   │   ├── <span class="d">src/</span><br>
+│   │   │   ├── <span class="d">commands/</span>          <span class="cm"># checkout, status, cancel, profiles, payments, proxies, help</span><br>
+│   │   │   ├── <span class="d">events/</span>            <span class="cm"># ready, interactionCreate, guildCreate</span><br>
+│   │   │   ├── <span class="d">embeds/</span>            <span class="cm"># task embed builders per state</span><br>
+│   │   │   └── <span class="f">main.ts</span><br>
+│   │   └── <span class="f">package.json</span><br>
+│   │<br>
+│   └── <span class="d">worker/</span>                <span class="cm"># Checkout worker process</span><br>
+│       ├── <span class="d">src/</span><br>
+│       │   ├── <span class="f">supervisor.ts</span>      <span class="cm"># spawns + monitors child worker processes</span><br>
+│       │   ├── <span class="f">worker-process.ts</span>  <span class="cm"># single BullMQ Worker, runs checkout engine</span><br>
+│       │   └── <span class="f">health.ts</span>          <span class="cm"># memory monitor, Prometheus metrics exporter</span><br>
+│       └── <span class="f">package.json</span><br>
+│<br>
+├── <span class="d">packages/</span><br>
+│   ├── <span class="d">db/</span>                    <span class="cm"># Drizzle schema, migrations, db client factory</span><br>
+│   │   ├── <span class="d">src/</span><br>
+│   │   │   ├── <span class="f">schema.ts</span>          <span class="cm"># ALL table definitions</span><br>
+│   │   │   ├── <span class="f">client.ts</span>          <span class="cm"># drizzle(pool) factory</span><br>
+│   │   │   └── <span class="f">index.ts</span><br>
+│   │   ├── <span class="d">migrations/</span>            <span class="cm"># drizzle-kit generated SQL files</span><br>
+│   │   └── <span class="f">drizzle.config.ts</span><br>
+│   │<br>
+│   ├── <span class="d">queue/</span>                 <span class="cm"># BullMQ definitions, job types, producer helpers</span><br>
+│   │   └── <span class="d">src/</span><br>
+│   │       ├── <span class="f">queues.ts</span>          <span class="cm"># queue factory per retailer</span><br>
+│   │       ├── <span class="f">producers.ts</span>       <span class="cm"># enqueueCheckout, enqueueProxyHealth, enqueueWebhook</span><br>
+│   │       └── <span class="f">types.ts</span>           <span class="cm"># CheckoutJobData, WebhookJobData, etc.</span><br>
+│   │<br>
+│   ├── <span class="d">engine/</span>                <span class="cm"># State machine, retailer router, retry classifier</span><br>
+│   │   └── <span class="d">src/</span><br>
+│   │       ├── <span class="f">stateMachine.ts</span>    <span class="cm"># XState v5 machine</span><br>
+│   │       ├── <span class="f">runner.ts</span>          <span class="cm"># orchestrates a single checkout task end-to-end</span><br>
+│   │       ├── <span class="f">router.ts</span>          <span class="cm"># slug → adapter dynamic import</span><br>
+│   │       ├── <span class="f">retry.ts</span>           <span class="cm"># error classification, backoff policy</span><br>
+│   │       └── <span class="f">logger.ts</span>          <span class="cm"># logEvent() writes to checkout_events</span><br>
+│   │<br>
+│   ├── <span class="d">browser/</span>               <span class="cm"># Playwright session factory + stealth config</span><br>
+│   │   └── <span class="d">src/</span><br>
+│   │       ├── <span class="f">session.ts</span>         <span class="cm"># createSession()</span><br>
+│   │       ├── <span class="f">fingerprint.ts</span>     <span class="cm"># canvas noise, WebGL, navigator patches</span><br>
+│   │       ├── <span class="f">useragents.ts</span>      <span class="cm"># per-retailer UA pools</span><br>
+│   │       └── <span class="f">interceptor.ts</span>     <span class="cm"># block images/fonts, log XHR responses</span><br>
+│   │<br>
+│   ├── <span class="d">proxy/</span>                 <span class="cm"># Proxy pool manager, health checker, rotation</span><br>
+│   │   └── <span class="d">src/</span><br>
+│   │       ├── <span class="f">parser.ts</span>          <span class="cm"># normalise all proxy formats</span><br>
+│   │       ├── <span class="f">health.ts</span>          <span class="cm"># ping + latency check</span><br>
+│   │       └── <span class="f">pool.ts</span>            <span class="cm"># round-robin / sticky selection</span><br>
+│   │<br>
+│   ├── <span class="d">captcha/</span>               <span class="cm"># Detection + solving pipeline</span><br>
+│   │   └── <span class="d">src/</span><br>
+│   │       ├── <span class="f">detector.ts</span>        <span class="cm"># DOM + network detection</span><br>
+│   │       ├── <span class="f">twocaptcha.ts</span>      <span class="cm"># 2captcha API client</span><br>
+│   │       ├── <span class="f">capsolver.ts</span>       <span class="cm"># CapSolver API client (fallback)</span><br>
+│   │       └── <span class="f">pipeline.ts</span>        <span class="cm"># auto-solve → user-assist orchestration</span><br>
+│   │<br>
+│   ├── <span class="d">payment/</span>               <span class="cm"># Card vault, cycling logic, payment states</span><br>
+│   │   └── <span class="d">src/</span><br>
+│   │       ├── <span class="f">vault.ts</span>           <span class="cm"># AES-256-GCM encrypt/decrypt PAN</span><br>
+│   │       ├── <span class="f">cycling.ts</span>         <span class="cm"># getNextMethod(), recordDecline()</span><br>
+│   │       └── <span class="f">lock.ts</span>            <span class="cm"># Redis NX order lock</span><br>
+│   │<br>
+│   ├── <span class="d">retailers/</span>             <span class="cm"># All retailer adapter modules</span><br>
+│   │   ├── <span class="d">core/</span>              <span class="cm"># RetailerAdapter abstract class + shared types</span><br>
+│   │   │   ├── <span class="f">adapter.ts</span><br>
+│   │   │   └── <span class="f">types.ts</span><br>
+│   │   ├── <span class="d">dominos/</span>           <span class="cm"># integration-spec.md + adapter.ts + tests/</span><br>
+│   │   ├── <span class="d">shake-shack/</span><br>
+│   │   ├── <span class="d">wingstop/</span><br>
+│   │   ├── <span class="d">five-guys/</span><br>
+│   │   ├── <span class="d">panda-express/</span><br>
+│   │   ├── <span class="d">jersey-mikes/</span><br>
+│   │   ├── <span class="d">buffalo-wild-wings/</span><br>
+│   │   ├── <span class="d">applebees/</span><br>
+│   │   ├── <span class="d">ihop/</span><br>
+│   │   ├── <span class="d">whataburger/</span><br>
+│   │   ├── <span class="d">wawa/</span><br>
+│   │   ├── <span class="d">insomnia-cookies/</span><br>
+│   │   ├── <span class="d">uber-eats/</span><br>
+│   │   └── <span class="d">instacart/</span>         <span class="cm"># ← discovery session required before build</span><br>
+│   │<br>
+│   ├── <span class="d">notifications/</span>         <span class="cm"># Discord DM + webhook dispatch helpers</span><br>
+│   └── <span class="d">shared/</span>                <span class="cm"># Shared types, enums, Zod schemas, constants</span><br>
+│       └── <span class="d">src/</span><br>
+│           ├── <span class="f">types.ts</span><br>
+│           ├── <span class="f">enums.ts</span>           <span class="cm"># TaskState, PaymentStatus, ProxyProtocol …</span><br>
+│           └── <span class="f">schemas.ts</span>         <span class="cm"># Zod validation schemas for API request bodies</span><br>
+│<br>
+├── <span class="d">infra/</span><br>
+│   ├── <span class="f">docker-compose.yml</span>     <span class="cm"># dev: postgres, pgbouncer, redis, loki, grafana</span><br>
+│   ├── <span class="f">docker-compose.prod.yml</span> <span class="cm"># prod: adds api, web, bot, worker services</span><br>
+│   ├── <span class="f">nginx.conf</span>             <span class="cm"># reverse proxy, TLS termination, custom-domain routing</span><br>
+│   └── <span class="d">grafana/</span>               <span class="cm"># dashboard JSON + datasource provisioning</span><br>
+│<br>
+├── <span class="f">turbo.json</span>               <span class="cm"># pipeline: build depends on ^build; test depends on ^build</span><br>
+├── <span class="f">tsconfig.base.json</span>       <span class="cm"># strict: true, target: ES2022, moduleResolution: bundler</span><br>
+├── <span class="f">.eslintrc.base.js</span><br>
+└── <span class="f">package.json</span>             <span class="cm"># workspaces: ["apps/*","packages/*"]</span>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════ ENV & DOCKER -->
+<section id="env">
+<div class="s-label">Setup</div>
+<h2>Environment &amp; Docker</h2>
+
+<div class="code-block">
+<div class="code-head"><span class="file">infra/docker-compose.yml</span><span class="lang">yaml</span></div>
+<pre><code>services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: aco
+      POSTGRES_USER: aco
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports: ["5432:5432"]
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U aco"]
+      interval: 10s; retries: 5
+
+  pgbouncer:
+    image: bitnami/pgbouncer:latest
+    environment:
+      PGBOUNCER_DATABASE: aco
+      POSTGRESQL_HOST: postgres
+      POSTGRESQL_PORT: 5432
+      PGBOUNCER_POOL_MODE: transaction
+      PGBOUNCER_MAX_CLIENT_CONN: 500
+      PGBOUNCER_DEFAULT_POOL_SIZE: 20
+    ports: ["6432:6432"]
+    depends_on: [postgres]
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save 60 1 --appendonly yes --loglevel warning
+    ports: ["6379:6379"]
+    volumes: [redis_data:/data]
+
+  loki:
+    image: grafana/loki:latest
+    ports: ["3100:3100"]
+
+  grafana:
+    image: grafana/grafana:latest
+    ports: ["3001:3000"]
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana:/etc/grafana/provisioning
+
+volumes: {postgres_data, redis_data, grafana_data}</code></pre></div>
+
+<div class="code-block">
+<div class="code-head"><span class="file">.env (managed via Doppler)</span><span class="lang">env</span></div>
+<pre><code># Database
+DATABASE_URL=postgresql://aco:pass@localhost:6432/aco
+DIRECT_DATABASE_URL=postgresql://aco:pass@localhost:5432/aco  # for migrations
+
+# Redis
+REDIS_URL=redis://localhost:6379
+
+# Auth
+JWT_SECRET=&lt;64-byte hex&gt;
+JWT_EXPIRES_IN=7d
+API_KEY_SALT=&lt;32-byte hex&gt;
+
+# Card encryption — NEVER commit, NEVER log
+CARD_ENCRYPTION_KEY=&lt;64-byte hex — AES-256 key&gt;
+
+# Worker config
+MAX_WORKERS_PER_RETAILER=3
+WORKER_MAX_TASKS=50         # restart worker after N tasks (memory leak prevention)
+BROWSER_HEADLESS=true
+
+# CAPTCHA
+TWOCAPTCHA_API_KEY=...
+CAPSOLVER_API_KEY=...
+
+# Discord
+DISCORD_BOT_TOKEN=...
+DISCORD_CLIENT_ID=...
+DISCORD_GUILD_ID=...        # for dev — registers commands instantly
+
+# Stripe
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_METER_ID=...
+
+# Notifications
+SMTP_HOST=smtp.postmarkapp.com
+SMTP_API_KEY=...</code></pre></div>
+</section>
+
+<!-- ═══════════════════════════════════ CI/CD -->
+<section id="ci">
+<div class="s-label">Setup</div>
+<h2>CI / CD Pipeline</h2>
+<div class="code-block">
+<div class="code-head"><span class="file">.github/workflows/ci.yml</span><span class="lang">yaml</span></div>
+<pre><code>name: CI
+on: [push, pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env: {POSTGRES_DB: aco_test, POSTGRES_USER: aco, POSTGRES_PASSWORD: test}
+        ports: ["5432:5432"]
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: 'npm'}
+      - run: npm ci
+      - run: npx turbo lint          # ESLint all packages
+      - run: npx turbo typecheck     # tsc --noEmit all packages
+      - run: npx drizzle-kit migrate # apply migrations to test DB
+        env: {DATABASE_URL: postgresql://aco:test@localhost:5432/aco_test}
+      - run: npx turbo test          # vitest unit tests
+      - run: npx turbo test:e2e      # playwright integration tests (mock adapter)
+        if: github.ref == 'refs/heads/main'
+
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - run: docker buildx bake -f docker-compose.prod.yml --push
+      - run: docker stack deploy -c docker-compose.prod.yml aco
+        # SSH into production node and run deploy</code></pre></div>
+</section>
+
+<hr>
+<!-- ═══════════════════════════════════ PHASE 1 -->
+<section id="p1">
+<div class="phase">
+  <div class="phase-n">01</div>
+  <div>
+    <div class="phase-name">Foundation</div>
+    <div class="phase-wk">Weeks 1–4</div>
+    <div class="phase-desc">Database schema, auth system, tenant middleware, and CRUD API for all entities. No checkout logic. Deliverable: running environment where every data entity exists, API auth works, all CRUD endpoints return real data.</div>
+    <div class="phase-tags">
+      <span class="chip">packages/db</span><span class="chip">apps/api</span><span class="chip">packages/shared</span>
+    </div>
+  </div>
+</div>
+
+<h3 id="p1-db">Database Schema — <code>packages/db/src/schema.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/db/src/schema.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> {
+  pgTable, pgEnum, uuid, text, integer, boolean,
+  timestamp, jsonb, unique, index
+} <span class="k">from</span> <span class="s">'drizzle-orm/pg-core'</span>
+
+<span class="c">// ── Enums ────────────────────────────────────────────────────</span>
+<span class="k">export const</span> <span class="fn">taskStateEnum</span> = <span class="fn">pgEnum</span>(<span class="s">'task_state'</span>, [
+  <span class="s">'QUEUED'</span>, <span class="s">'CHECKOUT_STARTED'</span>, <span class="s">'CART_BUILDING'</span>, <span class="s">'PROCESSING'</span>,
+  <span class="s">'VERIFICATION_REQUIRED'</span>, <span class="s">'AUTOMATED_VERIFICATION'</span>,
+  <span class="s">'USER_ACTION_REQUIRED'</span>, <span class="s">'VERIFIED'</span>, <span class="s">'CHECKOUT_RESUMED'</span>,
+  <span class="s">'PAYMENT_DECLINED'</span>, <span class="s">'PAYMENT_CYCLING'</span>, <span class="s">'PAYMENT_VERIFICATION_REQUIRED'</span>,
+  <span class="s">'ORDER_CONFIRMED'</span>, <span class="s">'CHECKOUT_FAILED'</span>, <span class="s">'MAX_RETRIES_REACHED'</span>, <span class="s">'CANCELLED'</span>
+])
+
+<span class="k">export const</span> <span class="fn">userRoleEnum</span> = <span class="fn">pgEnum</span>(<span class="s">'user_role'</span>, [<span class="s">'super_admin'</span>,<span class="s">'reseller'</span>,<span class="s">'user'</span>])
+
+<span class="c">// ── Tables ───────────────────────────────────────────────────</span>
+<span class="k">export const</span> tenants = <span class="fn">pgTable</span>(<span class="s">'tenants'</span>, {
+  id:            uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  name:          text(<span class="s">'name'</span>).notNull(),
+  slug:          text(<span class="s">'slug'</span>).notNull().unique(),
+  resellerId:    uuid(<span class="s">'reseller_id'</span>),          <span class="c">// null = top-level tenant</span>
+  plan:          text(<span class="s">'plan'</span>).notNull().default(<span class="s">'standard'</span>),
+  billingStatus: text(<span class="s">'billing_status'</span>).notNull().default(<span class="s">'active'</span>),
+  stripeCustomerId: text(<span class="s">'stripe_customer_id'</span>),
+  usageLimits:   jsonb(<span class="s">'usage_limits'</span>).default({
+    dailyTasks: <span class="n">500</span>, monthlyTasks: <span class="n">10000</span>, concurrentWorkers: <span class="n">5</span>
+  }),
+  brandingConfig: jsonb(<span class="s">'branding_config'</span>).default({}),
+  allowedRetailers: jsonb(<span class="s">'allowed_retailers'</span>).default([]),
+  createdAt:     timestamp(<span class="s">'created_at'</span>).defaultNow(),
+})
+
+<span class="k">export const</span> users = <span class="fn">pgTable</span>(<span class="s">'users'</span>, {
+  id:           uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  tenantId:     uuid(<span class="s">'tenant_id'</span>).notNull().references(() => tenants.id),
+  email:        text(<span class="s">'email'</span>).notNull(),
+  passwordHash: text(<span class="s">'password_hash'</span>).notNull(),
+  role:         <span class="fn">userRoleEnum</span>(<span class="s">'role'</span>).notNull().default(<span class="s">'user'</span>),
+  totpSecret:   text(<span class="s">'totp_secret'</span>),
+  totpEnabled:  boolean(<span class="s">'totp_enabled'</span>).notNull().default(<span class="k">false</span>),
+  createdAt:    timestamp(<span class="s">'created_at'</span>).defaultNow(),
+}, t => ({ uniq: unique().on(t.tenantId, t.email) }))
+
+<span class="k">export const</span> addresses = <span class="fn">pgTable</span>(<span class="s">'addresses'</span>, {
+  id:       uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  userId:   uuid(<span class="s">'user_id'</span>).notNull().references(() => users.id),
+  tenantId: uuid(<span class="s">'tenant_id'</span>).notNull(),
+  label:    text(<span class="s">'label'</span>),                     <span class="c">// e.g. "Home", "Office"</span>
+  line1:    text(<span class="s">'line1'</span>).notNull(),
+  line2:    text(<span class="s">'line2'</span>),
+  city:     text(<span class="s">'city'</span>).notNull(),
+  state:    text(<span class="s">'state'</span>).notNull(),
+  zip:      text(<span class="s">'zip'</span>).notNull(),
+  country:  text(<span class="s">'country'</span>).notNull().default(<span class="s">'US'</span>),
+})
+
+<span class="k">export const</span> paymentMethods = <span class="fn">pgTable</span>(<span class="s">'payment_methods'</span>, {
+  id:           uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  userId:       uuid(<span class="s">'user_id'</span>).notNull().references(() => users.id),
+  tenantId:     uuid(<span class="s">'tenant_id'</span>).notNull(),
+  encryptedPan: text(<span class="s">'encrypted_pan'</span>).notNull(),   <span class="c">// AES-256-GCM: iv:ciphertext:authtag</span>
+  encryptedCvv: text(<span class="s">'encrypted_cvv'</span>).notNull(),   <span class="c">// same format</span>
+  last4:        text(<span class="s">'last4'</span>).notNull(),
+  expMonth:     integer(<span class="s">'exp_month'</span>).notNull(),
+  expYear:      integer(<span class="s">'exp_year'</span>).notNull(),
+  brand:        text(<span class="s">'brand'</span>).notNull(),            <span class="c">// visa, mastercard, amex, discover</span>
+  billingZip:   text(<span class="s">'billing_zip'</span>),
+  billingName:  text(<span class="s">'billing_name'</span>),
+  status:       text(<span class="s">'status'</span>).notNull().default(<span class="s">'ACTIVE'</span>),
+  attemptCount: integer(<span class="s">'attempt_count'</span>).notNull().default(<span class="n">0</span>),
+  declineCount: integer(<span class="s">'decline_count'</span>).notNull().default(<span class="n">0</span>),
+  createdAt:    timestamp(<span class="s">'created_at'</span>).defaultNow(),
+})
+
+<span class="k">export const</span> proxies = <span class="fn">pgTable</span>(<span class="s">'proxies'</span>, {
+  id:          uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  tenantId:    uuid(<span class="s">'tenant_id'</span>).notNull(),
+  label:       text(<span class="s">'label'</span>),
+  host:        text(<span class="s">'host'</span>).notNull(),
+  port:        integer(<span class="s">'port'</span>).notNull(),
+  username:    text(<span class="s">'username'</span>),
+  password:    text(<span class="s">'password'</span>),
+  protocol:    text(<span class="s">'protocol'</span>).notNull().default(<span class="s">'http'</span>), <span class="c">// http|https|socks5</span>
+  isHealthy:   boolean(<span class="s">'is_healthy'</span>).notNull().default(<span class="k">true</span>),
+  latencyMs:   integer(<span class="s">'latency_ms'</span>),
+  lastChecked: timestamp(<span class="s">'last_checked'</span>),
+  assignedTo:  text(<span class="s">'assigned_to'</span>),               <span class="c">// profile_id or 'pool'</span>
+})
+
+<span class="k">export const</span> profiles = <span class="fn">pgTable</span>(<span class="s">'profiles'</span>, {
+  id:               uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  userId:           uuid(<span class="s">'user_id'</span>).notNull().references(() => users.id),
+  tenantId:         uuid(<span class="s">'tenant_id'</span>).notNull(),
+  name:             text(<span class="s">'name'</span>).notNull(),
+  addressId:        uuid(<span class="s">'address_id'</span>).references(() => addresses.id),
+  paymentMethodIds: jsonb(<span class="s">'payment_method_ids'</span>).default([]), <span class="c">// ordered array</span>
+  proxyId:          uuid(<span class="s">'proxy_id'</span>).references(() => proxies.id),
+  notes:            text(<span class="s">'notes'</span>),
+})
+
+<span class="k">export const</span> checkoutTasks = <span class="fn">pgTable</span>(<span class="s">'checkout_tasks'</span>, {
+  id:          uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  tenantId:    uuid(<span class="s">'tenant_id'</span>).notNull(),
+  userId:      uuid(<span class="s">'user_id'</span>).notNull(),
+  profileId:   uuid(<span class="s">'profile_id'</span>).notNull(),
+  retailer:    text(<span class="s">'retailer'</span>).notNull(),
+  items:       jsonb(<span class="s">'items'</span>).notNull(),
+  state:       <span class="fn">taskStateEnum</span>(<span class="s">'state'</span>).notNull().default(<span class="s">'QUEUED'</span>),
+  workerId:    text(<span class="s">'worker_id'</span>),
+  retryCount:  integer(<span class="s">'retry_count'</span>).notNull().default(<span class="n">0</span>),
+  metadata:    jsonb(<span class="s">'metadata'</span>).default({}),
+  createdAt:   timestamp(<span class="s">'created_at'</span>).defaultNow(),
+  startedAt:   timestamp(<span class="s">'started_at'</span>),
+  completedAt: timestamp(<span class="s">'completed_at'</span>),
+}, t => ({ tenantIdx: index(<span class="s">'task_tenant_idx'</span>).on(t.tenantId, t.createdAt) }))
+
+<span class="k">export const</span> checkoutEvents = <span class="fn">pgTable</span>(<span class="s">'checkout_events'</span>, {
+  id:     uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  taskId: uuid(<span class="s">'task_id'</span>).notNull().references(() => checkoutTasks.id),
+  state:  text(<span class="s">'state'</span>).notNull(),
+  detail: jsonb(<span class="s">'detail'</span>).default({}),
+  ts:     timestamp(<span class="s">'ts'</span>).defaultNow(),
+}, t => ({ taskIdx: index(<span class="s">'event_task_idx'</span>).on(t.taskId) }))
+
+<span class="k">export const</span> orders = <span class="fn">pgTable</span>(<span class="s">'orders'</span>, {
+  id:              uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  taskId:          uuid(<span class="s">'task_id'</span>).notNull().references(() => checkoutTasks.id),
+  tenantId:        uuid(<span class="s">'tenant_id'</span>).notNull(),
+  retailer:        text(<span class="s">'retailer'</span>).notNull(),
+  retailerOrderId: text(<span class="s">'retailer_order_id'</span>),
+  items:           jsonb(<span class="s">'items'</span>),
+  totalCents:      integer(<span class="s">'total_cents'</span>),
+  status:          text(<span class="s">'status'</span>).notNull().default(<span class="s">'CONFIRMED'</span>),
+  confirmedAt:     timestamp(<span class="s">'confirmed_at'</span>),
+})
+
+<span class="k">export const</span> apiKeys = <span class="fn">pgTable</span>(<span class="s">'api_keys'</span>, {
+  id:        uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  tenantId:  uuid(<span class="s">'tenant_id'</span>).notNull(),
+  hashedKey: text(<span class="s">'hashed_key'</span>).notNull().unique(),
+  label:     text(<span class="s">'label'</span>),
+  scopes:    jsonb(<span class="s">'scopes'</span>).default([<span class="s">'checkout:write'</span>,<span class="s">'orders:read'</span>]),
+  rateLimit: integer(<span class="s">'rate_limit'</span>).notNull().default(<span class="n">60</span>),
+  lastUsed:  timestamp(<span class="s">'last_used'</span>),
+  createdAt: timestamp(<span class="s">'created_at'</span>).defaultNow(),
+})
+
+<span class="k">export const</span> webhooks = <span class="fn">pgTable</span>(<span class="s">'webhooks'</span>, {
+  id:        uuid(<span class="s">'id'</span>).primaryKey().defaultRandom(),
+  tenantId:  uuid(<span class="s">'tenant_id'</span>).notNull(),
+  url:       text(<span class="s">'url'</span>).notNull(),
+  events:    jsonb(<span class="s">'events'</span>).default([<span class="s">'task.completed'</span>,<span class="s">'order.confirmed'</span>]),
+  secret:    text(<span class="s">'secret'</span>).notNull(),              <span class="c">// HMAC signing secret</span>
+  isActive:  boolean(<span class="s">'is_active'</span>).notNull().default(<span class="k">true</span>),
+  createdAt: timestamp(<span class="s">'created_at'</span>).defaultNow(),
+})</code></pre></div>
+
+<h3 id="p1-auth">Auth System — <code>apps/api/src/plugins/auth.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">apps/api/src/plugins/auth.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> fp <span class="k">from</span> <span class="s">'fastify-plugin'</span>
+<span class="k">import</span> { createHash, randomBytes } <span class="k">from</span> <span class="s">'crypto'</span>
+<span class="k">import</span> bcrypt <span class="k">from</span> <span class="s">'bcryptjs'</span>
+<span class="k">import</span> { authenticator } <span class="k">from</span> <span class="s">'otplib'</span>
+<span class="k">import</span> { db, apiKeys, users, tenants } <span class="k">from</span> <span class="s">'@aco/db'</span>
+
+<span class="c">// Every request gets tenantId + userId attached before route handlers run</span>
+<span class="fn">declare module</span> <span class="s">'fastify'</span> {
+  <span class="k">interface</span> <span class="t">FastifyRequest</span> {
+    tenantId: <span class="t">string</span>
+    userId:   <span class="t">string</span>
+    userRole: <span class="t">string</span>
+  }
+}
+
+<span class="k">export default</span> <span class="fn">fp</span>(<span class="k">async function</span> <span class="fn">authPlugin</span>(app) {
+
+  <span class="c">// ── JWT auth (web dashboard + Discord bot internal calls) ─────</span>
+  app.<span class="fn">decorateRequest</span>(<span class="s">'tenantId'</span>, <span class="s">''</span>)
+  app.<span class="fn">decorateRequest</span>(<span class="s">'userId'</span>, <span class="s">''</span>)
+
+  app.<span class="fn">addHook</span>(<span class="s">'preHandler'</span>, <span class="k">async</span> (req, reply) => {
+    <span class="k">const</span> authHeader = req.headers.authorization
+
+    <span class="k">if</span> (authHeader?.startsWith(<span class="s">'Bearer '</span>)) {
+      <span class="k">const</span> token = authHeader.<span class="fn">slice</span>(<span class="n">7</span>)
+
+      <span class="c">// Try API key first (starts with 'aco_')</span>
+      <span class="k">if</span> (token.startsWith(<span class="s">'aco_'</span>)) {
+        <span class="k">const</span> hashed = <span class="fn">createHash</span>(<span class="s">'sha256'</span>).update(token).<span class="fn">digest</span>(<span class="s">'hex'</span>)
+        <span class="k">const</span> key = <span class="k">await</span> db.query.apiKeys.<span class="fn">findFirst</span>({
+          where: (k, { eq }) => eq(k.hashedKey, hashed)
+        })
+        <span class="k">if</span> (!key) <span class="k">return</span> reply.<span class="fn">code</span>(<span class="n">401</span>).<span class="fn">send</span>({ error: <span class="s">'Invalid API key'</span> })
+        req.tenantId = key.tenantId
+        req.userId   = <span class="s">'api'</span>
+        req.userRole = <span class="s">'api'</span>
+        <span class="k">return</span>
+      }
+
+      <span class="c">// JWT token</span>
+      <span class="k">try</span> {
+        <span class="k">const</span> payload = <span class="k">await</span> app.jwt.<span class="fn">verify</span>(token)
+        req.tenantId = payload.tenantId
+        req.userId   = payload.sub
+        req.userRole = payload.role
+      } <span class="k">catch</span> {
+        <span class="k">return</span> reply.<span class="fn">code</span>(<span class="n">401</span>).<span class="fn">send</span>({ error: <span class="s">'Invalid token'</span> })
+      }
+    }
+  })
+
+  <span class="c">// ── Helpers ───────────────────────────────────────────────────</span>
+  app.<span class="fn">decorate</span>(<span class="s">'hashPassword'</span>,  (pw: <span class="t">string</span>) => bcrypt.<span class="fn">hash</span>(pw, <span class="n">12</span>))
+  app.<span class="fn">decorate</span>(<span class="s">'checkPassword'</span>, (pw: <span class="t">string</span>, hash: <span class="t">string</span>) => bcrypt.<span class="fn">compare</span>(pw, hash))
+  app.<span class="fn">decorate</span>(<span class="s">'generateApiKey'</span>, () => <span class="s">`aco_${randomBytes(32).toString('hex')}`</span>)
+  app.<span class="fn">decorate</span>(<span class="s">'hashApiKey'</span>, (k: <span class="t">string</span>) => <span class="fn">createHash</span>(<span class="s">'sha256'</span>).update(k).<span class="fn">digest</span>(<span class="s">'hex'</span>))
+  app.<span class="fn">decorate</span>(<span class="s">'generateTotp'</span>, () => authenticator.<span class="fn">generateSecret</span>())
+  app.<span class="fn">decorate</span>(<span class="s">'verifyTotp'</span>,   (token: <span class="t">string</span>, secret: <span class="t">string</span>) =>
+    authenticator.<span class="fn">verify</span>({ token, secret }))
+})</code></pre></div>
+
+<h3 id="p1-api">Core API Routes</h3>
+<div class="code-block">
+<div class="code-head"><span class="file">apps/api/src/routes/tasks.ts (excerpt)</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { FastifyPluginAsync } <span class="k">from</span> <span class="s">'fastify'</span>
+<span class="k">import</span> { z } <span class="k">from</span> <span class="s">'zod'</span>
+<span class="k">import</span> { enqueueCheckout } <span class="k">from</span> <span class="s">'@aco/queue'</span>
+<span class="k">import</span> { checkUsageCap } <span class="k">from</span> <span class="s">'../services/usage'</span>
+<span class="k">import</span> { db, checkoutTasks, checkoutEvents } <span class="k">from</span> <span class="s">'@aco/db'</span>
+
+<span class="k">const</span> CreateTaskSchema = z.<span class="fn">object</span>({
+  profileId: z.<span class="fn">string</span>().uuid(),
+  retailer:  z.<span class="fn">enum</span>([<span class="s">'dominos'</span>,<span class="s">'shake-shack'</span>,<span class="s">'wingstop'</span> <span class="c">/* … all 14 */</span>]),
+  items:     z.<span class="fn">array</span>(z.<span class="fn">object</span>({
+    id:       z.<span class="fn">string</span>(),
+    name:     z.<span class="fn">string</span>(),
+    quantity: z.<span class="fn">number</span>().int().positive(),
+    options:  z.<span class="fn">record</span>(z.<span class="fn">string</span>()).optional(),
+  })).min(<span class="n">1</span>),
+})
+
+<span class="k">const</span> tasks: <span class="t">FastifyPluginAsync</span> = <span class="k">async</span> (app) => {
+
+  <span class="c">// POST /v1/tasks — create checkout task</span>
+  app.<span class="fn">post</span>(<span class="s">'/'</span>, <span class="k">async</span> (req, reply) => {
+    <span class="k">const</span> body = CreateTaskSchema.<span class="fn">parse</span>(req.body)
+    <span class="k">await</span> <span class="fn">checkUsageCap</span>(req.tenantId)         <span class="c">// throws 429 if over limit</span>
+    <span class="k">const</span> [task] = <span class="k">await</span> db.<span class="fn">insert</span>(checkoutTasks).<span class="fn">values</span>({
+      tenantId:  req.tenantId,
+      userId:    req.userId,
+      profileId: body.profileId,
+      retailer:  body.retailer,
+      items:     body.items,
+    }).<span class="fn">returning</span>()
+    <span class="k">await</span> <span class="fn">enqueueCheckout</span>({ taskId: task.id, ...body })
+    <span class="k">return</span> reply.<span class="fn">code</span>(<span class="n">201</span>).<span class="fn">send</span>(task)
+  })
+
+  <span class="c">// GET /v1/tasks/:id — task + full event log</span>
+  app.<span class="fn">get</span>(<span class="s">'/:id'</span>, <span class="k">async</span> (req, reply) => {
+    <span class="k">const</span> task = <span class="k">await</span> db.query.checkoutTasks.<span class="fn">findFirst</span>({
+      where: (t, { eq, and }) => and(
+        eq(t.id, (<span class="k">req</span>.params <span class="k">as any</span>).id),
+        eq(t.tenantId, req.tenantId)        <span class="c">// ALWAYS scope by tenant</span>
+      ),
+      with: { events: { orderBy: (e, { asc }) => [asc(e.ts)] } }
+    })
+    <span class="k">if</span> (!task) <span class="k">return</span> reply.<span class="fn">code</span>(<span class="n">404</span>).<span class="fn">send</span>()
+    <span class="k">return</span> task
+  })
+
+  <span class="c">// GET /v1/tasks/:id/stream — SSE live state updates</span>
+  app.<span class="fn">get</span>(<span class="s">'/:id/stream'</span>, <span class="k">async</span> (req, reply) => {
+    reply.raw.<span class="fn">setHeader</span>(<span class="s">'Content-Type'</span>, <span class="s">'text/event-stream'</span>)
+    reply.raw.<span class="fn">setHeader</span>(<span class="s">'Cache-Control'</span>, <span class="s">'no-cache'</span>)
+    <span class="k">const</span> send = (data: <span class="t">object</span>) =>
+      reply.raw.<span class="fn">write</span>(<span class="s">`data: ${JSON.stringify(data)}\n\n`</span>)
+    <span class="c">// Subscribe to Redis pub/sub channel for this task</span>
+    <span class="k">const</span> sub = <span class="k">await</span> <span class="fn">subscribeToTask</span>((<span class="k">req</span>.params <span class="k">as any</span>).id, send)
+    req.raw.<span class="fn">on</span>(<span class="s">'close'</span>, () => sub.<span class="fn">unsubscribe</span>())
+  })
+}
+
+<span class="k">export default</span> tasks</code></pre></div>
+
+<h3>Phase 1 Checklist</h3>
+<ul class="cl">
+  <li><b>Turborepo scaffold</b> — <code>create-turbo</code>, tsconfig base, ESLint + Prettier shared configs, Husky pre-commit</li>
+  <li><b>Docker Compose dev stack</b> — Postgres, PgBouncer, Redis, Loki, Grafana running with <code>docker compose up</code></li>
+  <li><b>packages/db</b> — Full schema above, <code>drizzle-kit generate</code> + <code>migrate</code> scripts, typed client factory</li>
+  <li><b>packages/shared</b> — All Zod schemas, enum types, shared TS interfaces</li>
+  <li><b>apps/api: auth plugin</b> — JWT issue/verify (fastify-jwt), API key hash (SHA-256), bcrypt, TOTP</li>
+  <li><b>apps/api: tenant middleware</b> — Attach tenantId to every request; all DB queries MUST include WHERE tenant_id clause</li>
+  <li><b>apps/api: CRUD routes</b> — users, profiles, addresses, paymentMethods, proxies, apiKeys, webhooks</li>
+  <li><b>Proxy bulk import endpoint</b> — <code>POST /v1/proxies/bulk</code>: parse all formats, normalise, batch insert</li>
+  <li><b>Card bulk import endpoint</b> — <code>POST /v1/payment-methods/bulk</code>: CSV parse, encrypt PAN+CVV, BIN lookup for brand, batch insert</li>
+  <li><b>Usage cap service</b> — Redis INCR daily counter, throw 429 when over tenant limit</li>
+  <li><b>Pino logger setup</b> — JSON logs with request_id, tenant_id, user_id on every line; shipped to Loki</li>
+</ul>
+<div class="danger"><b>NEVER log PAN, CVV, or CARD_ENCRYPTION_KEY at any log level.</b> Add an ESLint rule that flags any <code>log.*</code> call containing 'pan', 'cvv', 'card', or 'encryption'.</div>
+</section>
+
+<!-- ═══════════════════════════════════ PHASE 2 -->
+<section id="p2">
+<div class="phase">
+  <div class="phase-n">02</div>
+  <div>
+    <div class="phase-name">Checkout Engine</div>
+    <div class="phase-wk">Weeks 5–9</div>
+    <div class="phase-desc">XState state machine, BullMQ per-retailer queues, worker supervisor with crash recovery, retry classifier, mock adapter for end-to-end pipeline testing. No real browser yet.</div>
+    <div class="phase-tags"><span class="chip">packages/engine</span><span class="chip">packages/queue</span><span class="chip">apps/worker</span></div>
+  </div>
+</div>
+
+<h3 id="p2-sm">State Machine — <code>packages/engine/src/stateMachine.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/engine/src/stateMachine.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { createMachine, assign } <span class="k">from</span> <span class="s">'xstate'</span>
+
+<span class="k">export const</span> checkoutMachine = <span class="fn">createMachine</span>({
+  id: <span class="s">'checkout'</span>,
+  initial: <span class="s">'QUEUED'</span>,
+  context: {
+    taskId:             <span class="s">''</span>,
+    retailer:           <span class="s">''</span>,
+    retryCount:         <span class="n">0</span>,
+    paymentMethodIndex: <span class="n">0</span>,
+    triedMethodIds:     [] <span class="k">as string</span>[],
+    verificationType:   <span class="k">null</span> <span class="k">as string</span> | <span class="k">null</span>,
+    error:              <span class="k">null</span> <span class="k">as string</span> | <span class="k">null</span>,
+  },
+  states: {
+    QUEUED:            { on: { START: <span class="s">'CHECKOUT_STARTED'</span> }},
+    CHECKOUT_STARTED:  { on: { PROCEED: <span class="s">'CART_BUILDING'</span>,  FAIL: <span class="s">'CHECKOUT_FAILED'</span> }},
+    CART_BUILDING:     { on: { DONE: <span class="s">'PROCESSING'</span>,        FAIL: <span class="s">'CHECKOUT_FAILED'</span> }},
+    PROCESSING: {
+      on: {
+        VERIFICATION_DETECTED: <span class="s">'VERIFICATION_REQUIRED'</span>,
+        PAYMENT_DECLINED:      <span class="s">'PAYMENT_DECLINED'</span>,
+        PAYMENT_VERIFY:        <span class="s">'PAYMENT_VERIFICATION_REQUIRED'</span>,
+        RATE_LIMITED: {
+          target: <span class="s">'QUEUED'</span>,
+          actions: assign({ retryCount: ctx => ctx.retryCount + <span class="n">1</span> })
+        },
+        SUCCESS: <span class="s">'ORDER_CONFIRMED'</span>,
+        FAIL:    <span class="s">'CHECKOUT_FAILED'</span>,
+      }
+    },
+    VERIFICATION_REQUIRED: {
+      on: {
+        AUTO_SOLVE:   <span class="s">'AUTOMATED_VERIFICATION'</span>,
+        NEEDS_HUMAN:  <span class="s">'USER_ACTION_REQUIRED'</span>,
+      }
+    },
+    AUTOMATED_VERIFICATION: {
+      on: { SOLVED: <span class="s">'VERIFIED'</span>, FAILED: <span class="s">'USER_ACTION_REQUIRED'</span> }
+    },
+    USER_ACTION_REQUIRED: {
+      on: { SOLVED: <span class="s">'VERIFIED'</span>, TIMEOUT: <span class="s">'CHECKOUT_FAILED'</span> }
+    },
+    VERIFIED:              { on: { RESUME: <span class="s">'CHECKOUT_RESUMED'</span> }},
+    CHECKOUT_RESUMED:      { on: { CONTINUE: <span class="s">'PROCESSING'</span> }},
+    PAYMENT_DECLINED: {
+      on: {
+        NEXT_METHOD:     <span class="s">'PAYMENT_CYCLING'</span>,
+        NO_MORE_METHODS: <span class="s">'CHECKOUT_FAILED'</span>,
+      }
+    },
+    PAYMENT_CYCLING:              { on: { RETRY: <span class="s">'PROCESSING'</span>, FAIL: <span class="s">'CHECKOUT_FAILED'</span> }},
+    PAYMENT_VERIFICATION_REQUIRED:{ on: { VERIFIED: <span class="s">'PROCESSING'</span>, FAIL: <span class="s">'CHECKOUT_FAILED'</span> }},
+    ORDER_CONFIRMED:     { type: <span class="s">'final'</span> },
+    CHECKOUT_FAILED:     { type: <span class="s">'final'</span> },
+    MAX_RETRIES_REACHED: { type: <span class="s">'final'</span> },
+    CANCELLED:           { type: <span class="s">'final'</span> },
+  }
+})</code></pre></div>
+
+<h3 id="p2-queue">Queue Setup — <code>packages/queue/src/queues.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/queue/src/queues.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { Queue, Worker, QueueEvents } <span class="k">from</span> <span class="s">'bullmq'</span>
+<span class="k">import</span> { Redis } <span class="k">from</span> <span class="s">'ioredis'</span>
+
+<span class="k">const</span> connection = <span class="k">new</span> <span class="fn">Redis</span>(process.env.REDIS_URL!, { maxRetriesPerRequest: <span class="k">null</span> })
+
+<span class="c">// Per-retailer queues allow independent concurrency limits + rate limiting</span>
+<span class="k">const</span> queueCache = <span class="k">new</span> Map&lt;<span class="t">string</span>, Queue&gt;()
+<span class="k">export function</span> <span class="fn">getQueue</span>(retailer: <span class="t">string</span>): <span class="t">Queue</span> {
+  <span class="k">if</span> (!queueCache.<span class="fn">has</span>(retailer)) {
+    queueCache.<span class="fn">set</span>(retailer, <span class="k">new</span> <span class="fn">Queue</span>(<span class="s">`checkout:${retailer}`</span>, {
+      connection,
+      defaultJobOptions: {
+        attempts: <span class="n">5</span>,
+        backoff:  { type: <span class="s">'exponential'</span>, delay: <span class="n">4000</span> },
+        removeOnComplete: { count: <span class="n">200</span> },
+        removeOnFail:     { count: <span class="n">500</span> },
+      }
+    }))
+  }
+  <span class="k">return</span> queueCache.<span class="fn">get</span>(retailer)!
+}
+
+<span class="c">// Proxy health check queue (repeatable)</span>
+<span class="k">export const</span> proxyHealthQueue = <span class="k">new</span> <span class="fn">Queue</span>(<span class="s">'proxy-health'</span>, { connection })
+<span class="c">// Webhook delivery queue</span>
+<span class="k">export const</span> webhookQueue = <span class="k">new</span> <span class="fn">Queue</span>(<span class="s">'webhooks'</span>, {
+  connection,
+  defaultJobOptions: { attempts: <span class="n">7</span>, backoff: { type: <span class="s">'exponential'</span>, delay: <span class="n">2000</span> } }
+})
+
+<span class="k">export async function</span> <span class="fn">enqueueCheckout</span>(
+  data: <span class="t">CheckoutJobData</span>,
+  opts: { priority?: <span class="t">number</span> } = {}
+) {
+  <span class="k">return</span> <span class="fn">getQueue</span>(data.retailer).<span class="fn">add</span>(<span class="s">'checkout'</span>, data, {
+    jobId:    data.taskId,         <span class="c">// idempotent — prevents duplicate queue entries</span>
+    priority: opts.priority ?? <span class="n">5</span>, <span class="c">// lower = higher priority in BullMQ</span>
+  })
+}</code></pre></div>
+
+<h3 id="p2-worker">Worker Supervisor — <code>apps/worker/src/supervisor.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">apps/worker/src/supervisor.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { fork, <span class="t">ChildProcess</span> } <span class="k">from</span> <span class="s">'child_process'</span>
+<span class="k">import</span> { log } <span class="k">from</span> <span class="s">'./logger'</span>
+
+<span class="k">const</span> RETAILER_COUNTS: Record&lt;<span class="t">string</span>, <span class="t">number</span>&gt; = {
+  <span class="s">'dominos'</span>:           <span class="n">3</span>,
+  <span class="s">'shake-shack'</span>:       <span class="n">2</span>,
+  <span class="s">'wingstop'</span>:          <span class="n">2</span>,
+  <span class="s">'five-guys'</span>:         <span class="n">2</span>,
+  <span class="s">'panda-express'</span>:     <span class="n">2</span>,
+  <span class="s">'jersey-mikes'</span>:      <span class="n">2</span>,
+  <span class="s">'buffalo-wild-wings'</span>:<span class="n">2</span>,
+  <span class="s">'applebees'</span>:         <span class="n">2</span>,
+  <span class="s">'ihop'</span>:              <span class="n">2</span>,
+  <span class="s">'whataburger'</span>:       <span class="n">2</span>,
+  <span class="s">'wawa'</span>:              <span class="n">2</span>,
+  <span class="s">'insomnia-cookies'</span>:  <span class="n">2</span>,
+  <span class="s">'uber-eats'</span>:         <span class="n">3</span>,   <span class="c">// conservative — Uber has account-level behaviour analysis</span>
+  <span class="s">'instacart'</span>:         <span class="n">3</span>,
+}
+
+<span class="k">const</span> workers = <span class="k">new</span> Map&lt;<span class="t">string</span>, <span class="t">ChildProcess</span>&gt;()
+
+<span class="k">function</span> <span class="fn">spawn</span>(retailer: <span class="t">string</span>, index: <span class="t">number</span>) {
+  <span class="k">const</span> id = <span class="s">`${retailer}-${index}`</span>
+  <span class="k">const</span> child = <span class="fn">fork</span>(<span class="s">'./worker-process'</span>, [retailer, <span class="fn">String</span>(index)], {
+    env: { ...process.env, WORKER_ID: id, WORKER_RETAILER: retailer }
+  })
+  workers.<span class="fn">set</span>(id, child)
+  log.<span class="fn">info</span>({ workerId: id }, <span class="s">'Worker spawned'</span>)
+
+  child.<span class="fn">on</span>(<span class="s">'exit'</span>, (code) => {
+    workers.<span class="fn">delete</span>(id)
+    log.<span class="fn">warn</span>({ workerId: id, code }, <span class="s">'Worker exited — restarting in 2s'</span>)
+    <span class="fn">setTimeout</span>(() => <span class="fn">spawn</span>(retailer, index), <span class="n">2000</span>)
+  })
+
+  child.<span class="fn">on</span>(<span class="s">'message'</span>, (msg: <span class="k">any</span>) => {
+    <span class="k">if</span> (msg.type === <span class="s">'health'</span>) <span class="c">// forward to Prometheus</span>
+      workerHealthGauge.<span class="fn">set</span>({ worker: id }, msg.heapUsedMB)
+  })
+}
+
+<span class="c">// Spawn all workers on startup</span>
+<span class="k">for</span> (<span class="k">const</span> [retailer, count] <span class="k">of</span> Object.<span class="fn">entries</span>(RETAILER_COUNTS)) {
+  <span class="k">for</span> (<span class="k">let</span> i = <span class="n">0</span>; i &lt; count; i++) <span class="fn">spawn</span>(retailer, i)
+}
+
+<span class="c">// Graceful shutdown</span>
+process.<span class="fn">on</span>(<span class="s">'SIGTERM'</span>, () => {
+  log.<span class="fn">info</span>(<span class="s">'Supervisor shutting down...'</span>)
+  workers.<span class="fn">forEach</span>(w => w.<span class="fn">kill</span>(<span class="s">'SIGTERM'</span>))
+  <span class="fn">setTimeout</span>(() => process.<span class="fn">exit</span>(<span class="n">0</span>), <span class="n">10000</span>)
+})</code></pre></div>
+
+<div class="code-block">
+<div class="code-head"><span class="file">apps/worker/src/worker-process.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { Worker } <span class="k">from</span> <span class="s">'bullmq'</span>
+<span class="k">import</span> { runCheckout } <span class="k">from</span> <span class="s">'@aco/engine'</span>
+<span class="k">import</span> { getQueue } <span class="k">from</span> <span class="s">'@aco/queue'</span>
+
+<span class="k">const</span> retailer = process.argv[<span class="n">2</span>]
+<span class="k">const</span> workerId  = process.env.WORKER_ID!
+<span class="k">let</span> taskCount = <span class="n">0</span>
+<span class="k">const</span> MAX_TASKS = <span class="fn">parseInt</span>(process.env.WORKER_MAX_TASKS ?? <span class="s">'50'</span>)
+
+<span class="k">const</span> worker = <span class="k">new</span> <span class="fn">Worker</span>(
+  <span class="s">`checkout:${retailer}`</span>,
+  <span class="k">async</span> (job) => {
+    taskCount++
+    log.<span class="fn">info</span>({ workerId, jobId: job.id, taskCount }, <span class="s">'Task started'</span>)
+    <span class="k">try</span> {
+      <span class="k">await</span> <span class="fn">runCheckout</span>(job.data, workerId)
+    } <span class="k">finally</span> {
+      <span class="c">// Report heap usage to supervisor</span>
+      process.<span class="fn">send</span>?.({ type: <span class="s">'health'</span>, heapUsedMB: process.memoryUsage().heapUsed / <span class="n">1e6</span> })
+      <span class="c">// Restart after MAX_TASKS to prevent memory leaks</span>
+      <span class="k">if</span> (taskCount >= MAX_TASKS) {
+        log.<span class="fn">info</span>({ workerId }, <span class="s">'Max tasks reached, exiting for restart'</span>)
+        <span class="k">await</span> worker.<span class="fn">close</span>()
+        process.<span class="fn">exit</span>(<span class="n">0</span>)
+      }
+    }
+  },
+  { connection: redis, concurrency: <span class="n">1</span> } <span class="c">// ONE task at a time per worker process</span>
+)</code></pre></div>
+
+<h3>Phase 2 Checklist</h3>
+<ul class="cl">
+  <li><b>XState machine</b> — All 16 states, all transitions, every transition calls <code>logEvent(taskId, state, detail)</code></li>
+  <li><b>packages/queue</b> — Per-retailer Queue factory, proxy health queue, webhook queue, <code>enqueueCheckout()</code></li>
+  <li><b>apps/worker: supervisor</b> — Child process fork per retailer×index, crash recovery with 2s delay, SIGTERM graceful shutdown</li>
+  <li><b>apps/worker: worker-process</b> — BullMQ Worker, concurrency=1, MAX_TASKS restart, heap reporting</li>
+  <li><b>packages/engine: runner.ts</b> — Orchestrates full checkout: load profile → create session → run adapter → handle states</li>
+  <li><b>packages/engine: router.ts</b> — Dynamic import of retailer adapter by slug: <code>await import(`@aco/retailers/${retailer}`)</code></li>
+  <li><b>packages/engine: retry.ts</b> — Classify errors: network/5xx → retryable; 429 → backoff + requeue; bad auth → fatal</li>
+  <li><b>Mock adapter</b> — Fake retailer in <code>packages/retailers/mock/</code> that sleeps 2–5s and returns success/failure randomly</li>
+  <li><b>Prometheus metrics</b> — Queue depth per retailer, tasks started/completed/failed per minute, worker count, retry rate</li>
+  <li><b>SSE pub/sub</b> — On state transition: <code>redis.publish(`task:${taskId}`, JSON.stringify(event))</code>; API SSE endpoint subscribes</li>
+</ul>
+</section>
+
+<!-- ═══════════════════════════════════ PHASE 3 -->
+<section id="p3">
+<div class="phase">
+  <div class="phase-n">03</div>
+  <div>
+    <div class="phase-name">Browser &amp; Session Layer</div>
+    <div class="phase-wk">Weeks 8–12 (parallel with Phase 2)</div>
+    <div class="phase-desc">Playwright session factory with stealth config, fingerprint injection, proxy integration, CAPTCHA detection and full solving pipeline. This package is imported by every retailer adapter.</div>
+    <div class="phase-tags"><span class="chip">packages/browser</span><span class="chip">packages/proxy</span><span class="chip">packages/captcha</span></div>
+  </div>
+</div>
+
+<h3 id="p3-session">Session Factory — <code>packages/browser/src/session.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/browser/src/session.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { chromium } <span class="k">from</span> <span class="s">'playwright-extra'</span>
+<span class="k">import</span> StealthPlugin <span class="k">from</span> <span class="s">'puppeteer-extra-plugin-stealth'</span>
+<span class="k">import</span> { <span class="fn">injectFingerprint</span> } <span class="k">from</span> <span class="s">'./fingerprint'</span>
+<span class="k">import</span> { <span class="fn">pickUserAgent</span> } <span class="k">from</span> <span class="s">'./useragents'</span>
+<span class="k">import</span> { <span class="fn">installInterceptor</span> } <span class="k">from</span> <span class="s">'./interceptor'</span>
+<span class="k">import</span> { <span class="fn">toPlaywrightProxy</span> } <span class="k">from</span> <span class="s">'@aco/proxy'</span>
+
+chromium.<span class="fn">use</span>(<span class="fn">StealthPlugin</span>())
+
+<span class="k">export interface</span> <span class="t">SessionConfig</span> {
+  retailer:  <span class="t">string</span>
+  taskId:    <span class="t">string</span>
+  proxy?:    <span class="t">ProxyRecord</span>
+  headless?: <span class="t">boolean</span>
+  savedState?: <span class="t">string</span>  <span class="c">// JSON — restore cookies + localStorage</span>
+}
+
+<span class="k">export interface</span> <span class="t">CheckoutSession</span> {
+  page:       <span class="t">Page</span>
+  context:    <span class="t">BrowserContext</span>
+  taskId:     <span class="t">string</span>
+  retailer:   <span class="t">string</span>
+  close():    <span class="t">Promise</span>&lt;<span class="t">void</span>&gt;
+  saveState(): <span class="t">Promise</span>&lt;<span class="t">string</span>&gt;  <span class="c">// serialise cookies + storage</span>
+}
+
+<span class="k">const</span> VIEWPORTS = [
+  { width: <span class="n">1920</span>, height: <span class="n">1080</span> }, { width: <span class="n">1440</span>, height: <span class="n">900</span> },
+  { width: <span class="n">1366</span>, height: <span class="n">768</span> },  { width: <span class="n">1280</span>, height: <span class="n">800</span> },
+]
+
+<span class="k">export async function</span> <span class="fn">createSession</span>(cfg: <span class="t">SessionConfig</span>): <span class="t">Promise</span>&lt;<span class="t">CheckoutSession</span>&gt; {
+  <span class="k">const</span> viewport = VIEWPORTS[Math.<span class="fn">floor</span>(Math.random() * VIEWPORTS.length)]
+
+  <span class="k">const</span> browser = <span class="k">await</span> chromium.<span class="fn">launch</span>({
+    headless: cfg.headless ?? <span class="k">true</span>,
+    args: [
+      <span class="s">'--no-sandbox'</span>, <span class="s">'--disable-setuid-sandbox'</span>,
+      <span class="s">'--disable-blink-features=AutomationControlled'</span>,
+      <span class="s">'--disable-web-security'</span>,
+      <span class="s">'--disable-features=IsolateOrigins,site-per-process'</span>,
+    ],
+    ...(cfg.proxy ? { proxy: <span class="fn">toPlaywrightProxy</span>(cfg.proxy) } : {})
+  })
+
+  <span class="k">const</span> context = <span class="k">await</span> browser.<span class="fn">newContext</span>({
+    userAgent:   <span class="fn">pickUserAgent</span>(cfg.retailer),
+    viewport,
+    locale:      <span class="s">'en-US'</span>,
+    timezoneId:  <span class="s">'America/Chicago'</span>,
+    permissions: [<span class="s">'geolocation'</span>],
+    geolocation: { latitude: <span class="n">41.85</span>, longitude: <span class="n">-87.65</span> }, <span class="c">// Chicago area</span>
+    extraHTTPHeaders: {
+      <span class="s">'Accept-Language'</span>: <span class="s">'en-US,en;q=0.9'</span>,
+      <span class="s">'sec-ch-ua-platform'</span>: <span class="s">'"Windows"'</span>,
+    },
+    ...(cfg.savedState ? <span class="fn">JSON</span>.<span class="fn">parse</span>(cfg.savedState) : {})
+  })
+
+  <span class="k">await</span> <span class="fn">injectFingerprint</span>(context)
+  <span class="k">const</span> page = <span class="k">await</span> context.<span class="fn">newPage</span>()
+  <span class="k">await</span> <span class="fn">installInterceptor</span>(page, cfg.retailer)
+
+  <span class="k">return</span> {
+    page, context,
+    taskId:    cfg.taskId,
+    retailer:  cfg.retailer,
+    <span class="k">async</span> close() { <span class="k">await</span> browser.<span class="fn">close</span>() },
+    <span class="k">async</span> saveState() {
+      <span class="k">const</span> cookies = <span class="k">await</span> context.<span class="fn">cookies</span>()
+      <span class="k">return</span> <span class="fn">JSON</span>.<span class="fn">stringify</span>({ storageState: { cookies } })
+    }
+  }
+}</code></pre></div>
+
+<h3 id="p3-stealth">Fingerprint Injection — <code>packages/browser/src/fingerprint.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/browser/src/fingerprint.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">export async function</span> <span class="fn">injectFingerprint</span>(ctx: <span class="t">BrowserContext</span>) {
+  <span class="k">await</span> ctx.<span class="fn">addInitScript</span>(() => {
+    <span class="c">// 1. Hide webdriver</span>
+    Object.<span class="fn">defineProperty</span>(navigator, <span class="s">'webdriver'</span>, { get: () => <span class="k">undefined</span> })
+
+    <span class="c">// 2. Canvas fingerprint noise (subtle, per-session)</span>
+    <span class="k">const</span> origGetImageData = CanvasRenderingContext2D.prototype.getImageData
+    CanvasRenderingContext2D.prototype.getImageData = <span class="k">function</span>(...args) {
+      <span class="k">const</span> imageData = <span class="fn">origGetImageData</span>.<span class="fn">apply</span>(<span class="k">this</span>, args)
+      <span class="k">for</span> (<span class="k">let</span> i = <span class="n">0</span>; i &lt; imageData.data.length; i += <span class="n">100</span>) {
+        imageData.data[i] = imageData.data[i] ^ (<span class="n">1</span>)  <span class="c">// 1-bit noise</span>
+      }
+      <span class="k">return</span> imageData
+    }
+
+    <span class="c">// 3. WebGL vendor/renderer spoofing</span>
+    <span class="k">const</span> getParam = WebGLRenderingContext.prototype.getParameter
+    WebGLRenderingContext.prototype.getParameter = <span class="k">function</span>(param) {
+      <span class="k">if</span> (param === <span class="n">37445</span>) <span class="k">return</span> <span class="s">'Intel Inc.'</span>
+      <span class="k">if</span> (param === <span class="n">37446</span>) <span class="k">return</span> <span class="s">'Intel Iris OpenGL Engine'</span>
+      <span class="k">return</span> <span class="fn">getParam</span>.<span class="fn">apply</span>(<span class="k">this</span>, [param])
+    }
+
+    <span class="c">// 4. Navigator plugins (non-empty)</span>
+    Object.<span class="fn">defineProperty</span>(navigator, <span class="s">'plugins'</span>, {
+      get: () => [<span class="n">1</span>,<span class="n">2</span>,<span class="n">3</span>,<span class="n">4</span>,<span class="n">5</span>]
+    })
+
+    <span class="c">// 5. Languages</span>
+    Object.<span class="fn">defineProperty</span>(navigator, <span class="s">'languages'</span>, {
+      get: () => [<span class="s">'en-US'</span>, <span class="s">'en'</span>]
+    })
+
+    <span class="c">// 6. Screen dimensions match viewport</span>
+    Object.<span class="fn">defineProperty</span>(screen, <span class="s">'colorDepth'</span>, { get: () => <span class="n">24</span> })
+  })
+}</code></pre></div>
+
+<h3 id="p3-proxy">Proxy Manager — <code>packages/proxy/src/</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/proxy/src/parser.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">export interface</span> <span class="t">ProxyRecord</span> {
+  host: <span class="t">string</span>; port: <span class="t">number</span>
+  username?: <span class="t">string</span>; password?: <span class="t">string</span>
+  protocol: <span class="s">'http'</span> | <span class="s">'https'</span> | <span class="s">'socks5'</span>
+}
+
+<span class="c">// Handles all common proxy formats:
+// host:port
+// host:port:user:pass
+// user:pass@host:port
+// protocol://host:port
+// protocol://user:pass@host:port</span>
+<span class="k">export function</span> <span class="fn">parseProxy</span>(raw: <span class="t">string</span>): <span class="t">ProxyRecord</span> {
+  <span class="k">const</span> normalised = raw.trim()
+  <span class="k">const</span> withProto = normalised.<span class="fn">includes</span>(<span class="s">'://'</span>)
+    ? normalised
+    : <span class="s">`http://${normalised}`</span>
+
+  <span class="k">try</span> {
+    <span class="k">const</span> url = <span class="k">new</span> <span class="fn">URL</span>(withProto)
+    <span class="k">return</span> {
+      host:     url.hostname,
+      port:     <span class="fn">parseInt</span>(url.port),
+      username: url.username || <span class="k">undefined</span>,
+      password: url.password || <span class="k">undefined</span>,
+      protocol: (url.protocol.<span class="fn">replace</span>(<span class="s">':'</span>, <span class="s">''</span>) || <span class="s">'http'</span>) <span class="k">as</span> <span class="t">ProxyRecord</span>[<span class="s">'protocol'</span>],
+    }
+  } <span class="k">catch</span> {
+    <span class="c">// host:port:user:pass format</span>
+    <span class="k">const</span> [host, portStr, username, password] = raw.<span class="fn">split</span>(<span class="s">':'</span>)
+    <span class="k">return</span> { host, port: <span class="fn">parseInt</span>(portStr), username, password, protocol: <span class="s">'http'</span> }
+  }
+}
+
+<span class="k">export function</span> <span class="fn">toPlaywrightProxy</span>(p: <span class="t">ProxyRecord</span>) {
+  <span class="k">return</span> {
+    server:   <span class="s">`${p.protocol}://${p.host}:${p.port}`</span>,
+    username: p.username,
+    password: p.password,
+  }
+}</code></pre></div>
+
+<h3 id="p3-captcha">CAPTCHA Pipeline — <code>packages/captcha/src/pipeline.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/captcha/src/pipeline.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { <span class="fn">detectCaptchaType</span> } <span class="k">from</span> <span class="s">'./detector'</span>
+<span class="k">import</span> { <span class="fn">solveWith2Captcha</span> } <span class="k">from</span> <span class="s">'./twocaptcha'</span>
+<span class="k">import</span> { <span class="fn">solveWithCapSolver</span> } <span class="k">from</span> <span class="s">'./capsolver'</span>
+<span class="k">import</span> { redis } <span class="k">from</span> <span class="s">'./redis'</span>
+
+<span class="k">export async function</span> <span class="fn">handleCaptcha</span>(
+  page:        <span class="t">Page</span>,
+  taskId:      <span class="t">string</span>,
+  notifyUser:  (taskId: <span class="t">string</span>, type: <span class="t">string</span>) =&gt; <span class="t">Promise</span>&lt;<span class="t">void</span>&gt;
+): <span class="t">Promise</span>&lt;<span class="s">'solved'</span> | <span class="s">'timeout'</span>&gt; {
+
+  <span class="k">const</span> type = <span class="k">await</span> <span class="fn">detectCaptchaType</span>(page)
+  <span class="k">if</span> (!type) <span class="k">return</span> <span class="s">'solved'</span>
+
+  log.<span class="fn">info</span>({ taskId, type }, <span class="s">'CAPTCHA detected, attempting auto-solve'</span>)
+
+  <span class="c">// Try 2captcha first</span>
+  <span class="k">try</span> {
+    <span class="k">const</span> token = <span class="k">await</span> <span class="fn">solveWith2Captcha</span>(page, type)
+    <span class="k">await</span> <span class="fn">injectToken</span>(page, type, token)
+    log.<span class="fn">info</span>({ taskId, type }, <span class="s">'Auto-solved via 2captcha'</span>)
+    <span class="k">return</span> <span class="s">'solved'</span>
+  } <span class="k">catch</span> (err) {
+    log.<span class="fn">warn</span>({ taskId, type, err }, <span class="s">'2captcha failed, trying CapSolver'</span>)
+  }
+
+  <span class="c">// Fallback to CapSolver</span>
+  <span class="k">try</span> {
+    <span class="k">const</span> token = <span class="k">await</span> <span class="fn">solveWithCapSolver</span>(page, type)
+    <span class="k">await</span> <span class="fn">injectToken</span>(page, type, token)
+    <span class="k">return</span> <span class="s">'solved'</span>
+  } <span class="k">catch</span> {
+    log.<span class="fn">warn</span>({ taskId, type }, <span class="s">'Auto-solve failed, falling back to user-assist'</span>)
+  }
+
+  <span class="c">// User-assist flow: notify via Discord DM or webhook
+  // Worker pauses here — resumes when Redis key is set by API endpoint</span>
+  <span class="k">await</span> <span class="fn">notifyUser</span>(taskId, type)
+
+  <span class="k">const</span> solveKey = <span class="s">`captcha:solved:${taskId}`</span>
+  <span class="k">const</span> TIMEOUT_MS = <span class="n">5</span> * <span class="n">60</span> * <span class="n">1000</span>
+  <span class="k">const</span> start = Date.<span class="fn">now</span>()
+
+  <span class="k">while</span> (Date.<span class="fn">now</span>() - start &lt; TIMEOUT_MS) {
+    <span class="k">const</span> solved = <span class="k">await</span> redis.<span class="fn">get</span>(solveKey)
+    <span class="k">if</span> (solved) { <span class="k">await</span> redis.<span class="fn">del</span>(solveKey); <span class="k">return</span> <span class="s">'solved'</span> }
+    <span class="k">await</span> <span class="fn">sleep</span>(<span class="n">3000</span>)
+  }
+  <span class="k">return</span> <span class="s">'timeout'</span>
+}
+
+<span class="c">// API endpoint for user-assist resolution</span>
+<span class="c">// POST /v1/tasks/:id/captcha-solved  →  redis.set(`captcha:solved:${id}`, '1', 'EX', 60)</span>
+
+<span class="k">async function</span> <span class="fn">detectCaptchaType</span>(page: <span class="t">Page</span>): <span class="t">Promise</span>&lt;<span class="t">string</span> | <span class="k">null</span>&gt; {
+  <span class="k">if</span> (<span class="k">await</span> page.$(<span class="s">'[data-sitekey]'</span>))            <span class="k">return</span> <span class="s">'recaptcha-v2'</span>
+  <span class="k">if</span> (<span class="k">await</span> page.$(<span class="s">'[data-size="invisible"]'</span>))    <span class="k">return</span> <span class="s">'recaptcha-v3'</span>
+  <span class="k">if</span> (<span class="k">await</span> page.$(<span class="s">'iframe[src*="hcaptcha.com"]'</span>)) <span class="k">return</span> <span class="s">'hcaptcha'</span>
+  <span class="k">if</span> (<span class="k">await</span> page.$(<span class="s">'[data-cf-turnstile]'</span>))        <span class="k">return</span> <span class="s">'turnstile'</span>
+  <span class="k">if</span> (<span class="k">await</span> page.$(<span class="s">'#arkose-iframe'</span>))             <span class="k">return</span> <span class="s">'arkose'</span>
+  <span class="k">return null</span>
+}</code></pre></div>
+</section>
+
+<!-- ═══════════════════════════════════ PHASE 4 -->
+<section id="p4">
+<div class="phase">
+  <div class="phase-n">04</div>
+  <div>
+    <div class="phase-name">Payment System</div>
+    <div class="phase-wk">Weeks 10–13</div>
+    <div class="phase-desc">AES-256-GCM card vault, card cycling logic, Redis order lock to prevent duplicates, 3DS/OTP pause-and-resume flow.</div>
+    <div class="phase-tags"><span class="chip">packages/payment</span></div>
+  </div>
+</div>
+
+<h3 id="p4-vault">Card Vault — <code>packages/payment/src/vault.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/payment/src/vault.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { createCipheriv, createDecipheriv, randomBytes } <span class="k">from</span> <span class="s">'crypto'</span>
+
+<span class="k">const</span> KEY = Buffer.<span class="fn">from</span>(process.env.CARD_ENCRYPTION_KEY!, <span class="s">'hex'</span>)  <span class="c">// 32 bytes</span>
+
+<span class="k">export function</span> <span class="fn">encryptField</span>(plaintext: <span class="t">string</span>): <span class="t">string</span> {
+  <span class="k">const</span> iv      = <span class="fn">randomBytes</span>(<span class="n">12</span>)
+  <span class="k">const</span> cipher  = <span class="fn">createCipheriv</span>(<span class="s">'aes-256-gcm'</span>, KEY, iv)
+  <span class="k">const</span> enc     = Buffer.<span class="fn">concat</span>([cipher.<span class="fn">update</span>(plaintext, <span class="s">'utf8'</span>), cipher.<span class="fn">final</span>()])
+  <span class="k">const</span> authTag = cipher.<span class="fn">getAuthTag</span>()
+  <span class="c">// Format: iv_hex:ciphertext_hex:authtag_hex</span>
+  <span class="k">return</span> [iv.<span class="fn">toString</span>(<span class="s">'hex'</span>), enc.<span class="fn">toString</span>(<span class="s">'hex'</span>), authTag.<span class="fn">toString</span>(<span class="s">'hex'</span>)].<span class="fn">join</span>(<span class="s">':'</span>)
+}
+
+<span class="k">export function</span> <span class="fn">decryptField</span>(encrypted: <span class="t">string</span>): <span class="t">string</span> {
+  <span class="k">const</span> [ivHex, encHex, tagHex] = encrypted.<span class="fn">split</span>(<span class="s">':'</span>)
+  <span class="k">const</span> decipher = <span class="fn">createDecipheriv</span>(<span class="s">'aes-256-gcm'</span>, KEY, Buffer.<span class="fn">from</span>(ivHex, <span class="s">'hex'</span>))
+  decipher.<span class="fn">setAuthTag</span>(Buffer.<span class="fn">from</span>(tagHex, <span class="s">'hex'</span>))
+  <span class="k">return</span> decipher.<span class="fn">update</span>(Buffer.<span class="fn">from</span>(encHex, <span class="s">'hex'</span>)).<span class="fn">toString</span>() + decipher.<span class="fn">final</span>().<span class="fn">toString</span>()
+}
+
+<span class="c">// Decrypted PAN lives only inside this function call — never assigned to a variable
+// that gets logged or passed to non-checkout code</span>
+<span class="k">export function</span> <span class="fn">withDecryptedCard</span>&lt;<span class="t">T</span>&gt;(
+  method: <span class="t">PaymentMethod</span>,
+  fn: (pan: <span class="t">string</span>, cvv: <span class="t">string</span>) =&gt; <span class="t">Promise</span>&lt;<span class="t">T</span>&gt;
+): <span class="t">Promise</span>&lt;<span class="t">T</span>&gt; {
+  <span class="k">return</span> <span class="fn">fn</span>(<span class="fn">decryptField</span>(method.encryptedPan), <span class="fn">decryptField</span>(method.encryptedCvv))
+}</code></pre></div>
+
+<h3 id="p4-cycling">Card Cycling — <code>packages/payment/src/cycling.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/payment/src/cycling.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">export async function</span> <span class="fn">getNextPaymentMethod</span>(
+  profileId:   <span class="t">string</span>,
+  excludeIds:  <span class="t">string</span>[],
+  db:          <span class="t">Database</span>
+): <span class="t">Promise</span>&lt;<span class="t">PaymentMethod</span> | <span class="k">null</span>&gt; {
+  <span class="k">const</span> profile = <span class="k">await</span> db.query.profiles.<span class="fn">findFirst</span>({
+    where: (p, { eq }) => eq(p.id, profileId),
+    columns: { paymentMethodIds: <span class="k">true</span> }
+  })
+  <span class="k">const</span> orderedIds = (profile?.paymentMethodIds <span class="k">as string</span>[]) ?? []
+
+  <span class="k">for</span> (<span class="k">const</span> id <span class="k">of</span> orderedIds) {
+    <span class="k">if</span> (excludeIds.<span class="fn">includes</span>(id)) <span class="k">continue</span>
+    <span class="k">const</span> m = <span class="k">await</span> db.query.paymentMethods.<span class="fn">findFirst</span>({
+      where: (pm, { eq, and }) => and(
+        eq(pm.id, id), eq(pm.status, <span class="s">'ACTIVE'</span>)
+      )
+    })
+    <span class="k">if</span> (m) <span class="k">return</span> m
+  }
+  <span class="k">return null</span>  <span class="c">// all methods tried or exhausted</span>
+}
+
+<span class="c">// Redis NX lock — prevents duplicate orders for same profile+retailer</span>
+<span class="k">export async function</span> <span class="fn">acquireOrderLock</span>(
+  profileId: <span class="t">string</span>, retailer: <span class="t">string</span>, redis: <span class="t">Redis</span>
+): <span class="t">Promise</span>&lt;() =&gt; <span class="t">Promise</span>&lt;<span class="t">void</span>&gt;&gt; {
+  <span class="k">const</span> key = <span class="s">`lock:order:${profileId}:${retailer}`</span>
+  <span class="k">const</span> ok = <span class="k">await</span> redis.<span class="fn">set</span>(key, <span class="s">'1'</span>, <span class="s">'NX'</span>, <span class="s">'EX'</span>, <span class="n">60</span>)
+  <span class="k">if</span> (!ok) <span class="k">throw new</span> <span class="fn">Error</span>(<span class="s">'Order already in progress for this profile+retailer'</span>)
+  <span class="k">return</span> () =&gt; redis.<span class="fn">del</span>(key).then(() =&gt; {})
+}
+
+<span class="k">export async function</span> <span class="fn">recordDecline</span>(
+  methodId: <span class="t">string</span>, taskId: <span class="t">string</span>, db: <span class="t">Database</span>
+) {
+  <span class="k">await</span> db.<span class="fn">update</span>(paymentMethods)
+    .<span class="fn">set</span>({ declineCount: sql<span class="s">`decline_count + 1`</span>, attemptCount: sql<span class="s">`attempt_count + 1`</span> })
+    .<span class="fn">where</span>(<span class="fn">eq</span>(paymentMethods.id, methodId))
+}</code></pre></div>
+</section>
+
+<!-- ═══════════════════════════════════ PHASE 5 -->
+<section id="p5">
+<div class="phase">
+  <div class="phase-n">05</div>
+  <div>
+    <div class="phase-name">Retailer Integrations</div>
+    <div class="phase-wk">Weeks 12–22</div>
+    <div class="phase-desc">14 retailer adapter modules, each implementing the RetailerAdapter contract. Discovery spec written before any code. Sequenced easiest-first.</div>
+    <div class="phase-tags"><span class="chip">packages/retailers/*</span></div>
+  </div>
+</div>
+
+<h3 id="p5-adapter">Adapter Interface — <code>packages/retailers/core/adapter.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/retailers/core/adapter.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">export interface</span> <span class="t">CartItem</span> {
+  id: <span class="t">string</span>; name: <span class="t">string</span>; quantity: <span class="t">number</span>
+  options?: Record&lt;<span class="t">string</span>, <span class="t">string</span>&gt;
+}
+
+<span class="k">export interface</span> <span class="t">CheckoutResult</span> {
+  success:       <span class="t">boolean</span>
+  orderId?:      <span class="t">string</span>
+  totalCents?:   <span class="t">number</span>
+  failureReason?: <span class="s">'PAYMENT_DECLINED'</span> | <span class="s">'OUT_OF_STOCK'</span>
+    | <span class="s">'ITEM_UNAVAILABLE'</span> | <span class="s">'SESSION_EXPIRED'</span>
+    | <span class="s">'RATE_LIMITED'</span> | <span class="s">'UNKNOWN'</span>
+  requiresVerification?: <span class="s">'CAPTCHA'</span> | <span class="s">'PAYMENT_3DS'</span> | <span class="s">'OTP'</span>
+}
+
+<span class="k">export abstract class</span> <span class="t">RetailerAdapter</span> {
+  <span class="k">abstract readonly</span> id:          <span class="t">string</span>
+  <span class="k">abstract readonly</span> displayName: <span class="t">string</span>
+  <span class="k">abstract readonly</span> baseUrl:     <span class="t">string</span>
+  <span class="k">abstract readonly</span> rateLimit: {
+    requestsPerMinute: <span class="t">number</span>    <span class="c">// set empirically during discovery</span>
+    concurrentMax:     <span class="t">number</span>
+    minDelayBetweenActionsMs: <span class="t">number</span>
+  }
+
+  <span class="c">// Core checkout flow</span>
+  <span class="k">abstract</span> <span class="fn">buildCart</span>(items: <span class="t">CartItem</span>[], s: <span class="t">CheckoutSession</span>):         <span class="t">Promise</span>&lt;<span class="t">void</span>&gt;
+  <span class="k">abstract</span> <span class="fn">setAddress</span>(addr: <span class="t">Address</span>, s: <span class="t">CheckoutSession</span>):           <span class="t">Promise</span>&lt;<span class="t">void</span>&gt;
+  <span class="k">abstract</span> <span class="fn">selectPayment</span>(method: <span class="t">PaymentMethod</span>, s: <span class="t">CheckoutSession</span>): <span class="t">Promise</span>&lt;<span class="t">void</span>&gt;
+  <span class="k">abstract</span> <span class="fn">submitCheckout</span>(s: <span class="t">CheckoutSession</span>):                        <span class="t">Promise</span>&lt;<span class="t">CheckoutResult</span>&gt;
+
+  <span class="c">// Detection helpers</span>
+  <span class="k">abstract</span> <span class="fn">detectVerification</span>(s: <span class="t">CheckoutSession</span>): <span class="t">Promise</span>&lt;<span class="t">string</span> | <span class="k">null</span>&gt;
+  <span class="k">abstract</span> <span class="fn">isRateLimited</span>(s: <span class="t">CheckoutSession</span>):      <span class="t">Promise</span>&lt;<span class="t">boolean</span>&gt;
+  <span class="k">abstract</span> <span class="fn">isSessionValid</span>(s: <span class="t">CheckoutSession</span>):     <span class="t">Promise</span>&lt;<span class="t">boolean</span>&gt;
+
+  <span class="c">// Base class helpers available to all adapters</span>
+  <span class="k">protected async</span> <span class="fn">humanDelay</span>(minMs = <span class="n">600</span>, maxMs = <span class="n">1800</span>) {
+    <span class="k">await</span> <span class="fn">sleep</span>(minMs + Math.<span class="fn">random</span>() * (maxMs - minMs))
+  }
+  <span class="k">protected async</span> <span class="fn">waitForNav</span>(page: <span class="t">Page</span>, url: <span class="t">RegExp</span>) {
+    <span class="k">await</span> page.<span class="fn">waitForURL</span>(url, { timeout: <span class="n">15000</span> })
+  }
+  <span class="k">protected async</span> <span class="fn">click</span>(page: <span class="t">Page</span>, selector: <span class="t">string</span>) {
+    <span class="k">await</span> page.<span class="fn">waitForSelector</span>(selector, { state: <span class="s">'visible'</span>, timeout: <span class="n">10000</span> })
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">200</span>, <span class="n">600</span>)
+    <span class="k">await</span> page.<span class="fn">click</span>(selector)
+  }
+  <span class="k">protected async</span> <span class="fn">type</span>(page: <span class="t">Page</span>, selector: <span class="t">string</span>, value: <span class="t">string</span>) {
+    <span class="k">await</span> page.<span class="fn">waitForSelector</span>(selector, { state: <span class="s">'visible'</span> })
+    <span class="k">await</span> page.<span class="fn">click</span>(selector)
+    <span class="c">// Type character by character with random delay (more human-like)</span>
+    <span class="k">for</span> (<span class="k">const</span> char <span class="k">of</span> value) {
+      <span class="k">await</span> page.<span class="fn">keyboard</span>.<span class="fn">type</span>(char, { delay: <span class="n">40</span> + Math.<span class="fn">random</span>() * <span class="n">80</span> })
+    }
+  }
+}</code></pre></div>
+
+<h3 id="p5-seq">Build Sequence</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>#</th><th>Retailer</th><th>Type</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>Domino's</b></td><td>Direct</td><td>Has a public order API — can use API calls instead of browser for most steps</td></tr>
+<tr><td>2</td><td><b>Shake Shack</b></td><td>Direct</td><td>Clean SPA checkout, proves browser automation pattern</td></tr>
+<tr><td>3</td><td><b>Wingstop</b></td><td>Direct</td><td>Standard web checkout</td></tr>
+<tr><td>4</td><td><b>Five Guys</b></td><td>Direct</td><td>Standard web checkout</td></tr>
+<tr><td>5</td><td><b>Panda Express</b></td><td>Direct</td><td>Standard web checkout</td></tr>
+<tr><td>6</td><td><b>Jersey Mike's</b></td><td>Direct</td><td>Standard web checkout</td></tr>
+<tr><td>7</td><td><b>Buffalo Wild Wings</b></td><td>Direct</td><td>May have Akamai bot detection</td></tr>
+<tr><td>8</td><td><b>Applebee's</b></td><td>Direct</td><td>May route through Olo ordering platform</td></tr>
+<tr><td>9</td><td><b>IHOP</b></td><td>Direct</td><td>May route through Olo ordering platform</td></tr>
+<tr><td>10</td><td><b>Insomnia Cookies</b></td><td>Direct</td><td>Late-night availability logic needed</td></tr>
+<tr><td>11</td><td><b>Whataburger</b></td><td>Direct</td><td>Regional — test accounts must be in Texas/SE region</td></tr>
+<tr><td>12</td><td><b>Wawa</b></td><td>Direct</td><td>Regional — test accounts must be in PA/NJ/FL region</td></tr>
+<tr><td>13</td><td><b>Uber Eats</b></td><td>Aggregator — Group Order</td><td>Customer builds cart on Uber Eats, shares group order link → ACO joins link, cart is pre-populated → checkout with payment. No item search, no address input needed. Humanisation of checkout timing is critical.</td></tr>
+<tr><td>14</td><td><b>Instacart</b></td><td>Aggregator</td><td><b>Discovery session with client FIRST before any code</b></td></tr>
+</tbody>
+</table></div>
+
+<h3 id="p5-ubereats">Uber Eats — Group Order Flow</h3>
+<p>The confirmed implementation approach from the client changes this significantly from a standard aggregator integration. The customer builds their own cart on Uber Eats, creates a group order, and sends the group order link to the ACO. The ACO joins via that link — the cart, address, restaurant, and items are all already there. The ACO's job is purely to complete the checkout, not to build the cart.</p>
+
+<div class="flow">
+<div class="flow-title">Confirmed Uber Eats group order flow</div>
+<div class="states">
+  <span class="st b">Customer builds cart on Uber Eats</span>
+  <span class="arr">→</span>
+  <span class="st b">Customer creates group order</span>
+  <span class="arr">→</span>
+  <span class="st b">Customer sends link to ACO</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st b">ACO receives group order URL</span>
+  <span class="arr">→</span>
+  <span class="st b">ACO navigates to link</span>
+  <span class="arr">→</span>
+  <span class="st b">Join group order (cart pre-populated)</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st b">Review cart (no changes needed)</span>
+  <span class="arr">→</span>
+  <span class="st b">Proceed to checkout</span>
+  <span class="arr">→</span>
+  <span class="st p">CAPTCHA if triggered</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st b">Enter payment</span>
+  <span class="arr">→</span>
+  <span class="st b">Submit with human-paced timing</span>
+  <span class="arr">→</span>
+  <span class="st g">Order confirmed → extract order ID</span>
+</div>
+</div>
+
+<div class="note"><b>What this eliminates:</b> No item search, no store selection, no address input, no menu navigation. The customer has already done all of that. The adapter only needs to handle: joining the group order URL, reviewing the pre-built cart, entering payment, and submitting. This is substantially simpler than a full aggregator integration.</div>
+
+<h4>Task input format for Uber Eats</h4>
+<p>Unlike other retailers where the task includes items and address, a Uber Eats task takes a group order URL as the primary input:</p>
+<div class="code-block">
+<div class="code-head"><span class="file">Uber Eats task input shape</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">interface</span> <span class="t">UberEatsTaskInput</span> {
+  retailer:       <span class="s">'uber-eats'</span>
+  profileId:      <span class="t">string</span>          <span class="c">// for payment method selection</span>
+  groupOrderUrl:  <span class="t">string</span>          <span class="c">// https://eats.uber.com/group-orders/{id}/join?source=...</span>
+  <span class="c">// items[] and address are NOT needed — they come from the group order link</span>
+}
+
+<span class="c">// Validation: groupOrderUrl must match Uber Eats group order URL pattern</span>
+<span class="k">const</span> UBER_GROUP_ORDER_PATTERN = <span class="s">/^https:\/\/eats\.uber\.com\/group-orders\/[a-f0-9-]+\/join/</span></code></pre></div>
+
+<h4>Uber Eats adapter — <code>packages/retailers/uber-eats/src/adapter.ts</code></h4>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/retailers/uber-eats/src/adapter.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">export class</span> <span class="t">UberEatsAdapter</span> <span class="k">extends</span> <span class="t">RetailerAdapter</span> {
+  readonly id          = <span class="s">'uber-eats'</span>
+  readonly displayName = <span class="s">'Uber Eats'</span>
+  readonly baseUrl     = <span class="s">'https://eats.uber.com'</span>
+
+  <span class="c">// Conservative — Uber has account-level behaviour analysis</span>
+  readonly rateLimit = {
+    requestsPerMinute:        <span class="n">10</span>,
+    concurrentMax:            <span class="n">3</span>,
+    minDelayBetweenActionsMs: <span class="n">1500</span>,  <span class="c">// longer delays — humanisation is critical here</span>
+  }
+
+  <span class="k">async</span> <span class="fn">buildCart</span>(items: <span class="t">CartItem</span>[], s: <span class="t">CheckoutSession</span>) {
+    <span class="c">// Cart is pre-built by the customer via group order.
+    // The group order URL is passed in via s.metadata.groupOrderUrl.
+    // This step just navigates to the link and joins.</span>
+    <span class="k">const</span> groupOrderUrl = s.metadata?.groupOrderUrl
+    <span class="k">if</span> (!groupOrderUrl) <span class="k">throw new</span> <span class="fn">FatalError</span>(<span class="s">'Uber Eats: no group order URL provided'</span>)
+    <span class="k">if</span> (!UBER_GROUP_ORDER_PATTERN.<span class="fn">test</span>(groupOrderUrl)) {
+      <span class="k">throw new</span> <span class="fn">FatalError</span>(<span class="s">'Uber Eats: invalid group order URL format'</span>)
+    }
+
+    <span class="k">await</span> <span class="fn">logEvent</span>(s.taskId, <span class="s">'CART_BUILDING'</span>, { groupOrderUrl })
+    <span class="k">await</span> s.page.<span class="fn">goto</span>(groupOrderUrl, { waitUntil: <span class="s">'networkidle'</span> })
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">1200</span>, <span class="n">2400</span>)  <span class="c">// realistic page-load pause</span>
+
+    <span class="c">// Handle any login prompt if not already signed in</span>
+    <span class="k">const</span> loginPrompt = <span class="k">await</span> s.page.$(SELECTORS.loginPrompt)
+    <span class="k">if</span> (loginPrompt) {
+      <span class="k">await</span> <span class="fn">ensureUberSession</span>(s.page, s.context, s.credentials, s.taskId, s.redis)
+      <span class="k">await</span> s.page.<span class="fn">goto</span>(groupOrderUrl, { waitUntil: <span class="s">'networkidle'</span> })
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">1000</span>, <span class="n">2000</span>)
+    }
+
+    <span class="c">// Join the group order</span>
+    <span class="k">await</span> s.page.<span class="fn">waitForSelector</span>(SELECTORS.joinGroupOrder, { timeout: <span class="n">15000</span> })
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">800</span>, <span class="n">1600</span>)
+    <span class="k">await</span> s.page.<span class="fn">click</span>(SELECTORS.joinGroupOrder)
+    <span class="k">await</span> s.page.<span class="fn">waitForLoadState</span>(<span class="s">'networkidle'</span>)
+
+    <span class="c">// Verify the cart has items — it should, since customer pre-built it</span>
+    <span class="k">const</span> cartItems = <span class="k">await</span> s.page.$$(SELECTORS.cartItemRow)
+    <span class="k">if</span> (cartItems.length === <span class="n">0</span>) {
+      <span class="k">throw new</span> <span class="fn">FatalError</span>(<span class="s">'Uber Eats: group order cart is empty after joining'</span>)
+    }
+    log.<span class="fn">info</span>({ taskId: s.taskId, itemCount: cartItems.length }, <span class="s">'Uber Eats: joined group order, cart populated'</span>)
+  }
+
+  <span class="k">async</span> <span class="fn">setAddress</span>(_addr: <span class="t">Address</span>, _s: <span class="t">CheckoutSession</span>) {
+    <span class="c">// Address is embedded in the group order — no action needed here</span>
+  }
+
+  <span class="k">async</span> <span class="fn">selectPayment</span>(method: <span class="t">PaymentMethod</span>, s: <span class="t">CheckoutSession</span>) {
+    s.paymentMethod = method  <span class="c">// stored, applied in submitCheckout</span>
+  }
+
+  <span class="k">async</span> <span class="fn">submitCheckout</span>(s: <span class="t">CheckoutSession</span>): <span class="t">Promise</span>&lt;<span class="t">CheckoutResult</span>&gt; {
+    <span class="c">// Navigate to checkout from the group order cart</span>
+    <span class="k">await</span> s.page.<span class="fn">waitForSelector</span>(SELECTORS.proceedToCheckout, { state: <span class="s">'visible'</span> })
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">1000</span>, <span class="n">2200</span>)  <span class="c">// pause — don't rush straight to checkout</span>
+    <span class="k">await</span> s.page.<span class="fn">click</span>(SELECTORS.proceedToCheckout)
+    <span class="k">await</span> s.page.<span class="fn">waitForLoadState</span>(<span class="s">'networkidle'</span>)
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">800</span>, <span class="n">1500</span>)
+
+    <span class="c">// Enter payment — Uber Eats card fields are typically in an iframe</span>
+    <span class="k">await</span> <span class="fn">enterUberPayment</span>(s.page, s.paymentMethod!, s.taskId)
+
+    <span class="c">// ── HUMANISATION: critical on Uber Eats ─────────────────────────────
+    // Variable pause before submit — 2–5 seconds, randomised.
+    // Uber's behaviour analysis looks for machine-speed form fill → immediate submit.
+    // A human pauses, maybe scrolls to review the order, then places it.</span>
+    <span class="k">await</span> <span class="fn">humanReviewPause</span>(s.page)
+
+    <span class="c">// Submit</span>
+    <span class="k">await</span> s.page.<span class="fn">waitForSelector</span>(SELECTORS.placeOrder, { state: <span class="s">'visible'</span> })
+    <span class="k">await</span> s.page.<span class="fn">click</span>(SELECTORS.placeOrder)
+
+    <span class="c">// Race outcomes</span>
+    <span class="k">const</span> outcome = <span class="k">await</span> Promise.<span class="fn">race</span>([
+      s.page.<span class="fn">waitForURL</span>(<span class="s">/order-status|order\/[a-f0-9-]+/</span>, { timeout: <span class="n">30000</span> }).<span class="fn">then</span>(() => <span class="s">'confirmed'</span>),
+      s.page.<span class="fn">waitForSelector</span>(SELECTORS.paymentError, { timeout: <span class="n">30000</span> }).<span class="fn">then</span>(() => <span class="s">'declined'</span>),
+      s.page.<span class="fn">waitForSelector</span>(SELECTORS.captchaContainer, { timeout: <span class="n">30000</span> }).<span class="fn">then</span>(() => <span class="s">'captcha'</span>),
+    ])
+
+    <span class="k">if</span> (outcome === <span class="s">'captcha'</span>)  <span class="k">return</span> { success: <span class="k">false</span>, requiresVerification: <span class="s">'CAPTCHA'</span> }
+    <span class="k">if</span> (outcome === <span class="s">'declined'</span>) <span class="k">return</span> { success: <span class="k">false</span>, failureReason: <span class="s">'PAYMENT_DECLINED'</span> }
+
+    <span class="c">// Extract order ID</span>
+    <span class="k">const</span> orderId = <span class="k">await</span> <span class="fn">extractUberOrderId</span>(s.page)
+    <span class="k">await</span> <span class="fn">extendUberSession</span>(s.credentials.email, s.redis)
+    log.<span class="fn">info</span>({ taskId: s.taskId, orderId }, <span class="s">'Uber Eats: order confirmed'</span>)
+    <span class="k">return</span> { success: <span class="k">true</span>, orderId }
+  }
+
+  <span class="k">async</span> <span class="fn">detectVerification</span>(s: <span class="t">CheckoutSession</span>) {
+    <span class="k">return</span> <span class="k">await</span> s.page.$(SELECTORS.captchaContainer) ? <span class="s">'captcha'</span> : <span class="k">null</span>
+  }
+
+  <span class="k">async</span> <span class="fn">isRateLimited</span>(s: <span class="t">CheckoutSession</span>) {
+    <span class="k">const</span> url = s.page.<span class="fn">url</span>()
+    <span class="k">return</span> url.<span class="fn">includes</span>(<span class="s">'rate-limit'</span>) || url.<span class="fn">includes</span>(<span class="s">'too-many'</span>)
+  }
+
+  <span class="k">async</span> <span class="fn">isSessionValid</span>(s: <span class="t">CheckoutSession</span>) {
+    <span class="k">return</span> !!(<span class="k">await</span> s.page.$(SELECTORS.accountAvatar).<span class="fn">catch</span>(() => <span class="k">null</span>))
+  }
+}
+
+<span class="c">// ── Humanisation helper ──────────────────────────────────────────────────
+// Simulates a human reviewing the order before submitting.
+// Scrolls down slowly, then back up, then pauses — variable timing.</span>
+<span class="k">async function</span> <span class="fn">humanReviewPause</span>(page: <span class="t">Page</span>) {
+  <span class="c">// Scroll down to review items</span>
+  <span class="k">await</span> page.<span class="fn">evaluate</span>(() => window.<span class="fn">scrollBy</span>({ top: <span class="n">300</span>, behavior: <span class="s">'smooth'</span> }))
+  <span class="k">await</span> <span class="fn">sleep</span>(<span class="n">600</span> + Math.<span class="fn">random</span>() * <span class="n">800</span>)
+  <span class="c">// Scroll back up to the submit button</span>
+  <span class="k">await</span> page.<span class="fn">evaluate</span>(() => window.<span class="fn">scrollBy</span>({ top: <span class="n">-200</span>, behavior: <span class="s">'smooth'</span> }))
+  <span class="k">await</span> <span class="fn">sleep</span>(<span class="n">800</span> + Math.<span class="fn">random</span>() * <span class="n">1200</span>)
+  <span class="c">// Final pause before clicking — 1.5 to 4 seconds, highly variable</span>
+  <span class="k">await</span> <span class="fn">sleep</span>(<span class="n">1500</span> + Math.<span class="fn">random</span>() * <span class="n">2500</span>)
+}</code></pre></div>
+
+<div class="note"><b>Humanisation note:</b> Uber Eats performs account-level behaviour analysis. The biggest signals are: form fill-to-submit speed (humans take time to review), scroll patterns (humans scroll down to check the order), and mouse movement between fields. The <code>humanReviewPause()</code> function above addresses the most critical one — the pause before submission. Mouse movement and realistic typing delays are handled by the base class <code>humanDelay()</code> and <code>typeHuman()</code> helpers. The client specifically flagged this as a priority — take it seriously during testing and adjust timing if Uber starts flagging sessions.</div>
+
+<h4>API input for a Uber Eats task (Discord bot / REST API)</h4>
+<div class="code-block">
+<div class="code-head"><span class="file">POST /v1/tasks — Uber Eats request body</span><span class="lang">JSON</span></div>
+<pre><code>{
+  <span class="s">"retailer"</span>: <span class="s">"uber-eats"</span>,
+  <span class="s">"profileId"</span>: <span class="s">"uuid-of-profile-with-payment-methods"</span>,
+  <span class="s">"items"</span>: [],           <span class="c">// empty — items come from the group order link</span>
+  <span class="s">"metadata"</span>: {
+    <span class="s">"groupOrderUrl"</span>: <span class="s">"https://eats.uber.com/group-orders/f0e9b187-d1ec-4491-b7db-37239b2cbefb/join?source=quickActionCopy"</span>
+  }
+}</code></pre></div>
+
+<h4>Discord bot — /checkout command for Uber Eats</h4>
+<p>The Uber Eats command takes a URL instead of an items list. The slash command should offer a dedicated <code>group_order_url</code> option when Uber Eats is selected as the retailer:</p>
+<div class="code-block">
+<div class="code-head"><span class="file">apps/bot/src/commands/checkout.ts — Uber Eats option</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="c">// When retailer === 'uber-eats', show a URL input instead of items</span>
+.<span class="fn">addStringOption</span>(o =>
+  o.<span class="fn">setName</span>(<span class="s">'group_order_url'</span>)
+   .<span class="fn">setDescription</span>(<span class="s">'Uber Eats group order link (paste from Uber Eats app)'</span>)
+   .<span class="fn">setRequired</span>(<span class="k">false</span>)  <span class="c">// only required when retailer is uber-eats</span>
+)
+
+<span class="c">// Validation in execute():</span>
+<span class="k">if</span> (retailer === <span class="s">'uber-eats'</span>) {
+  <span class="k">const</span> url = interaction.options.<span class="fn">getString</span>(<span class="s">'group_order_url'</span>)
+  <span class="k">if</span> (!url || !UBER_GROUP_ORDER_PATTERN.<span class="fn">test</span>(url)) {
+    <span class="k">return</span> interaction.<span class="fn">reply</span>({
+      content: <span class="s">'❌ Please provide a valid Uber Eats group order link.\nFormat: `https://eats.uber.com/group-orders/...`'</span>,
+      ephemeral: <span class="k">true</span>
+    })
+  }
+}</code></pre></div>
+
+<h4>Uber Eats build checklist</h4>
+<ul class="cl">
+  <li><b>URL validation</b> — Regex validates group order URL format before task is accepted. Invalid URLs rejected immediately with clear error.</li>
+  <li><b>Session management</b> — Uber account login persisted in Redis (same pattern as Instacart). Re-login on session expiry before navigating to group order URL.</li>
+  <li><b>Group order join flow</b> — Navigate to URL → handle any login prompt → click join → verify cart is not empty.</li>
+  <li><b>setAddress() is a no-op</b> — Address comes from the group order. No address input step in this adapter.</li>
+  <li><b>Payment entry</b> — Detect if card fields are in an iframe (Uber uses Braintree/Stripe hosted fields). <code>withDecryptedCard()</code> pattern, never log PAN.</li>
+  <li><b>humanReviewPause()</b> — Scroll + variable pause before submit. Test timing against Uber's detection. Adjust if sessions get flagged.</li>
+  <li><b>Submit race</b> — Race confirmed/declined/captcha. CAPTCHA → pipeline. Declined → card cycling.</li>
+  <li><b>Order ID extraction</b> — Extract from confirmation URL pattern or page element. Log warning if page reached but ID not found (order likely went through — do not resubmit).</li>
+  <li><b>Discord command</b> — Conditional group_order_url option when uber-eats selected. Clear error message on bad URL.</li>
+  <li><b>API schema</b> — items[] accepted as empty for uber-eats tasks. metadata.groupOrderUrl required and validated.</li>
+  <li><b>E2E test</b> — Full flow test with a real group order link against a test account. Verify humanisation timing doesn't trigger detection.</li>
+  <li><b>Stealth test</b> — Run session against bot.sannysoft.com before touching real Uber Eats. Uber's detection is sophisticated.</li>
+</ul>
+
+<h3 id="p5-example">Example Adapter — <code>packages/retailers/dominos/adapter.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">packages/retailers/dominos/adapter.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { RetailerAdapter, <span class="t">CartItem</span>, <span class="t">CheckoutResult</span> } <span class="k">from</span> <span class="s">'../core/adapter'</span>
+
+<span class="k">export class</span> <span class="t">DominosAdapter</span> <span class="k">extends</span> <span class="t">RetailerAdapter</span> {
+  readonly id          = <span class="s">'dominos'</span>
+  readonly displayName = <span class="s">"Domino's"</span>
+  readonly baseUrl     = <span class="s">'https://www.dominos.com'</span>
+  readonly rateLimit   = { requestsPerMinute: <span class="n">20</span>, concurrentMax: <span class="n">3</span>, minDelayBetweenActionsMs: <span class="n">800</span> }
+
+  <span class="k">async</span> <span class="fn">buildCart</span>(items: <span class="t">CartItem</span>[], s: <span class="t">CheckoutSession</span>) {
+    <span class="k">await</span> s.page.<span class="fn">goto</span>(<span class="s">`${this.baseUrl}/en/`</span>)
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>()
+
+    <span class="k">for</span> (<span class="k">const</span> item <span class="k">of</span> items) {
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">click</span>(s.page, <span class="s">`[data-product-code="${item.id}"]`</span>)
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>()
+
+      <span class="c">// Apply customisations</span>
+      <span class="k">if</span> (item.options) {
+        <span class="k">for</span> (<span class="k">const</span> [key, value] <span class="k">of</span> Object.<span class="fn">entries</span>(item.options)) {
+          <span class="k">await</span> <span class="k">this</span>.<span class="fn">click</span>(s.page, <span class="s">`[data-option="${key}"][data-value="${value}"]`</span>)
+          <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">300</span>, <span class="n">700</span>)
+        }
+      }
+
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">click</span>(s.page, <span class="s">'[data-testid="add-to-cart"]'</span>)
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>(<span class="n">500</span>, <span class="n">1200</span>)
+    }
+  }
+
+  <span class="k">async</span> <span class="fn">setAddress</span>(addr: <span class="t">Address</span>, s: <span class="t">CheckoutSession</span>) {
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">click</span>(s.page, <span class="s">'[data-testid="delivery-address"]'</span>)
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#address-line1'</span>, addr.line1)
+    <span class="k">if</span> (addr.line2) <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#address-line2'</span>, addr.line2)
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#city'</span>, addr.city)
+    <span class="k">await</span> s.page.<span class="fn">selectOption</span>(<span class="s">'#state'</span>, addr.state)
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#zip'</span>, addr.zip)
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">click</span>(s.page, <span class="s">'[data-testid="address-submit"]'</span>)
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">humanDelay</span>()
+  }
+
+  <span class="k">async</span> <span class="fn">selectPayment</span>(method: <span class="t">PaymentMethod</span>, s: <span class="t">CheckoutSession</span>) {
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">click</span>(s.page, <span class="s">'[data-testid="payment-card"]'</span>)
+    <span class="c">// PAN is decrypted inside withDecryptedCard — never stored in a variable outside</span>
+    <span class="k">await</span> <span class="fn">withDecryptedCard</span>(method, <span class="k">async</span> (pan, cvv) => {
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#card-number'</span>, pan)
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#card-expiry'</span>, <span class="s">`${method.expMonth}/${method.expYear}`</span>)
+      <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#card-cvv'</span>, cvv)
+    })
+    <span class="k">if</span> (method.billingZip) <span class="k">await</span> <span class="k">this</span>.<span class="fn">type</span>(s.page, <span class="s">'#billing-zip'</span>, method.billingZip)
+  }
+
+  <span class="k">async</span> <span class="fn">submitCheckout</span>(s: <span class="t">CheckoutSession</span>): <span class="t">Promise</span>&lt;<span class="t">CheckoutResult</span>&gt; {
+    <span class="k">await</span> <span class="k">this</span>.<span class="fn">click</span>(s.page, <span class="s">'[data-testid="place-order"]'</span>)
+
+    <span class="c">// Race: success confirmation vs error states</span>
+    <span class="k">const</span> result = <span class="k">await</span> Promise.<span class="fn">race</span>([
+      s.page.<span class="fn">waitForURL</span>(<span class="s">/order-confirmation/</span>, { timeout: <span class="n">20000</span> })
+        .<span class="fn">then</span>(() => <span class="s">'success'</span>),
+      s.page.<span class="fn">waitForSelector</span>(<span class="s">'[data-testid="payment-error"]'</span>, { timeout: <span class="n">20000</span> })
+        .<span class="fn">then</span>(() => <span class="s">'declined'</span>),
+      s.page.<span class="fn">waitForSelector</span>(<span class="s">'[data-testid="captcha-container"]'</span>, { timeout: <span class="n">20000</span> })
+        .<span class="fn">then</span>(() => <span class="s">'captcha'</span>),
+    ])
+
+    <span class="k">if</span> (result === <span class="s">'success'</span>) {
+      <span class="k">const</span> orderId = <span class="k">await</span> s.page.<span class="fn">textContent</span>(<span class="s">'[data-testid="order-id"]'</span>)
+      <span class="k">return</span> { success: <span class="k">true</span>, orderId: orderId?.trim() }
+    }
+    <span class="k">if</span> (result === <span class="s">'declined'</span>)
+      <span class="k">return</span> { success: <span class="k">false</span>, failureReason: <span class="s">'PAYMENT_DECLINED'</span> }
+    <span class="k">return</span> { success: <span class="k">false</span>, requiresVerification: <span class="s">'CAPTCHA'</span> }
+  }
+
+  <span class="k">async</span> <span class="fn">detectVerification</span>(s: <span class="t">CheckoutSession</span>) {
+    <span class="k">return</span> <span class="k">await</span> s.page.$(<span class="s">'[data-sitekey]'</span>) ? <span class="s">'recaptcha-v2'</span> : <span class="k">null</span>
+  }
+  <span class="k">async</span> <span class="fn">isRateLimited</span>(s: <span class="t">CheckoutSession</span>) {
+    <span class="k">return</span> s.page.url().<span class="fn">includes</span>(<span class="s">'sorry'</span>) || s.page.url().<span class="fn">includes</span>(<span class="s">'block'</span>)
+  }
+  <span class="k">async</span> <span class="fn">isSessionValid</span>(s: <span class="t">CheckoutSession</span>) {
+    <span class="k">return</span> !s.page.url().<span class="fn">includes</span>(<span class="s">'timeout'</span>)
+  }
+}</code></pre></div>
+
+<div class="note"><b>Before writing any adapter:</b> Complete the discovery process — manual checkout, HAR capture, anti-bot identification, CAPTCHA type, rate limit test — and write <code>integration-spec.md</code> in the retailer folder. Only then write code.</div>
+</section>
+
+<!-- ═══════════════════════════════════ PHASE 6 -->
+<section id="p6">
+<div class="phase">
+  <div class="phase-n">06</div>
+  <div>
+    <div class="phase-name">Interfaces</div>
+    <div class="phase-wk">Weeks 18–25</div>
+    <div class="phase-desc">Discord bot, Next.js web dashboard, external REST API, webhook delivery. All three consume the same internal API built in Phase 1–2.</div>
+    <div class="phase-tags"><span class="chip">apps/bot</span><span class="chip">apps/web</span><span class="chip">apps/api routes</span></div>
+  </div>
+</div>
+
+<h3 id="p6-discord">Discord Bot — <code>apps/bot/src/commands/checkout.ts</code></h3>
+<div class="code-block">
+<div class="code-head"><span class="file">apps/bot/src/commands/checkout.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> { SlashCommandBuilder, EmbedBuilder, Colors } <span class="k">from</span> <span class="s">'discord.js'</span>
+<span class="k">import</span> { <span class="fn">enqueueCheckout</span> } <span class="k">from</span> <span class="s">'@aco/queue'</span>
+
+<span class="k">export const</span> data = <span class="k">new</span> <span class="fn">SlashCommandBuilder</span>()
+  .<span class="fn">setName</span>(<span class="s">'checkout'</span>)
+  .<span class="fn">setDescription</span>(<span class="s">'Start an automated checkout task'</span>)
+  .<span class="fn">addStringOption</span>(o => o.<span class="fn">setName</span>(<span class="s">'retailer'</span>).<span class="fn">setDescription</span>(<span class="s">'Retailer'</span>).<span class="fn">setRequired</span>(<span class="k">true</span>)
+    .<span class="fn">addChoices</span>(...RETAILER_CHOICES))
+  .<span class="fn">addStringOption</span>(o => o.<span class="fn">setName</span>(<span class="s">'profile'</span>).<span class="fn">setDescription</span>(<span class="s">'Profile ID or name'</span>).<span class="fn">setRequired</span>(<span class="k">true</span>))
+  .<span class="fn">addStringOption</span>(o => o.<span class="fn">setName</span>(<span class="s">'items'</span>).<span class="fn">setDescription</span>(<span class="s">'JSON item array'</span>).<span class="fn">setRequired</span>(<span class="k">true</span>))
+
+<span class="k">export async function</span> <span class="fn">execute</span>(interaction) {
+  <span class="k">await</span> interaction.<span class="fn">deferReply</span>()
+
+  <span class="k">const</span> task = <span class="k">await</span> <span class="fn">createCheckoutTask</span>({
+    userId:    interaction.user.id,
+    retailer:  interaction.options.<span class="fn">getString</span>(<span class="s">'retailer'</span>),
+    profileId: <span class="k">await</span> <span class="fn">resolveProfile</span>(interaction.options.<span class="fn">getString</span>(<span class="s">'profile'</span>)),
+    items:     <span class="fn">JSON</span>.<span class="fn">parse</span>(interaction.options.<span class="fn">getString</span>(<span class="s">'items'</span>)),
+  })
+
+  <span class="k">const</span> msg = <span class="k">await</span> interaction.<span class="fn">editReply</span>({ embeds: [<span class="fn">buildEmbed</span>(task)] })
+
+  <span class="c">// Subscribe to task events — edit message as state changes</span>
+  <span class="k">const</span> sub = <span class="k">await</span> <span class="fn">subscribeToTask</span>(task.id, <span class="k">async</span> (event) => {
+    <span class="k">await</span> msg.<span class="fn">edit</span>({ embeds: [<span class="fn">buildEmbed</span>({ ...task, state: event.state })] })
+    <span class="k">if</span> (event.state === <span class="s">'USER_ACTION_REQUIRED'</span>) {
+      <span class="k">await</span> interaction.user.<span class="fn">send</span>({
+        content: <span class="s">`⚠️ CAPTCHA required for task \`${task.id}\`. Open the dashboard to resolve.`</span>
+      })
+    }
+    <span class="k">if</span> ([<span class="s">'ORDER_CONFIRMED'</span>, <span class="s">'CHECKOUT_FAILED'</span>].<span class="fn">includes</span>(event.state)) {
+      sub.<span class="fn">unsubscribe</span>()
+    }
+  })
+}
+
+<span class="k">function</span> <span class="fn">buildEmbed</span>(task) {
+  <span class="k">const</span> STATE_COLOURS = {
+    QUEUED: Colors.Yellow, PROCESSING: Colors.Blue,
+    ORDER_CONFIRMED: Colors.Green, CHECKOUT_FAILED: Colors.Red,
+  }
+  <span class="k">return new</span> <span class="fn">EmbedBuilder</span>()
+    .<span class="fn">setTitle</span>(<span class="s">`Checkout — ${task.retailer}`</span>)
+    .<span class="fn">setColor</span>(STATE_COLOURS[task.state] ?? Colors.Grey)
+    .<span class="fn">addFields</span>(
+      { name: <span class="s">'State'</span>,    value: task.state,          inline: <span class="k">true</span> },
+      { name: <span class="s">'Task ID'</span>,  value: <span class="s">`\`${task.id}\``</span>, inline: <span class="k">true</span> },
+    )
+    .<span class="fn">setTimestamp</span>()
+}</code></pre></div>
+
+<h3 id="p6-web">Web Dashboard Structure</h3>
+<div class="g2">
+  <div class="mc"><div class="mc-t">app/(auth)/</div><ul class="mc">
+    <li>login/page.tsx</li><li>register/page.tsx</li><li>two-factor/page.tsx</li>
+  </ul></div>
+  <div class="mc"><div class="mc-t">app/dashboard/</div><ul class="mc">
+    <li>page.tsx — live task feed + stats</li><li>components/TaskFeed.tsx (SSE)</li><li>components/StatsCards.tsx</li>
+  </ul></div>
+  <div class="mc"><div class="mc-t">app/tasks/</div><ul class="mc">
+    <li>page.tsx — paginated list</li><li>[id]/page.tsx — state machine view</li><li>[id]/events — event log timeline</li>
+  </ul></div>
+  <div class="mc"><div class="mc-t">app/payments/</div><ul class="mc">
+    <li>page.tsx — card list + status</li><li>bulk-upload/page.tsx</li><li>components/CardRow.tsx</li>
+  </ul></div>
+  <div class="mc"><div class="mc-t">app/proxies/</div><ul class="mc">
+    <li>page.tsx — proxy list + health</li><li>bulk-upload/page.tsx</li><li>components/ProxyHealth.tsx</li>
+  </ul></div>
+  <div class="mc"><div class="mc-t">app/admin/</div><ul class="mc">
+    <li>tenants/page.tsx</li><li>tenants/[id]/page.tsx — usage + limits</li><li>billing/page.tsx</li>
+  </ul></div>
+</div>
+
+<h3 id="p6-api">External API Endpoint Map</h3>
+<div class="code-block">
+<div class="code-head"><span class="file">API surface — all require Bearer header (JWT or aco_ key)</span><span class="lang">HTTP</span></div>
+<pre><code><span class="c"># Tasks</span>
+POST   /v1/tasks                       <span class="c"># create checkout task</span>
+GET    /v1/tasks                       <span class="c"># list (pagination: ?page&amp;limit&amp;state&amp;retailer)</span>
+GET    /v1/tasks/:id                   <span class="c"># task + event log</span>
+DELETE /v1/tasks/:id                   <span class="c"># cancel (QUEUED or PROCESSING only)</span>
+GET    /v1/tasks/:id/stream            <span class="c"># SSE live state updates</span>
+POST   /v1/tasks/:id/captcha-solved    <span class="c"># signal user resolved CAPTCHA</span>
+POST   /v1/tasks/:id/payment-verified  <span class="c"># signal 3DS complete</span>
+
+<span class="c"># Orders</span>
+GET    /v1/orders                      <span class="c"># ?retailer&amp;from&amp;to&amp;page&amp;limit</span>
+GET    /v1/orders/:id
+
+<span class="c"># Profiles</span>
+GET    /v1/profiles
+POST   /v1/profiles
+PATCH  /v1/profiles/:id
+DELETE /v1/profiles/:id
+
+<span class="c"># Payment methods</span>
+GET    /v1/payment-methods
+POST   /v1/payment-methods             <span class="c"># single card</span>
+POST   /v1/payment-methods/bulk        <span class="c"># CSV body: pan,exp_month,exp_year,cvv,zip</span>
+PATCH  /v1/payment-methods/:id
+DELETE /v1/payment-methods/:id
+
+<span class="c"># Proxies</span>
+GET    /v1/proxies
+POST   /v1/proxies
+POST   /v1/proxies/bulk                <span class="c"># newline-delimited body</span>
+DELETE /v1/proxies/:id
+GET    /v1/proxies/:id/health          <span class="c"># trigger immediate health check</span>
+
+<span class="c"># API keys + Webhooks</span>
+GET    /v1/api-keys
+POST   /v1/api-keys
+DELETE /v1/api-keys/:id
+GET    /v1/webhooks
+POST   /v1/webhooks
+DELETE /v1/webhooks/:id</code></pre></div>
+
+<h3 id="p6-webhooks">Webhook Delivery — <code>packages/queue</code> + worker</h3>
+<div class="code-block">
+<div class="code-head"><span class="file">Webhook event types + payload shapes</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="c">// Event types</span>
+<span class="s">'task.queued'</span>        <span class="c">// { taskId, retailer, createdAt }</span>
+<span class="s">'task.state_changed'</span> <span class="c">// { taskId, from, to, detail, ts }</span>
+<span class="s">'task.completed'</span>     <span class="c">// { taskId, retailer, orderId, totalCents }</span>
+<span class="s">'task.failed'</span>        <span class="c">// { taskId, reason, retryCount }</span>
+<span class="s">'order.confirmed'</span>    <span class="c">// { orderId, taskId, retailer, totalCents, items }</span>
+<span class="s">'payment.declined'</span>   <span class="c">// { taskId, last4, cycling: boolean }</span>
+<span class="s">'verification.required'</span> <span class="c">// { taskId, type: 'CAPTCHA'|'3DS'|'OTP' }</span>
+
+<span class="c">// Delivery: sign with HMAC-SHA256, retry 7× with exponential backoff</span>
+<span class="k">const</span> sig = createHmac(<span class="s">'sha256'</span>, webhook.secret)
+  .update(<span class="fn">JSON</span>.<span class="fn">stringify</span>(payload)).<span class="fn">digest</span>(<span class="s">'hex'</span>)
+headers[<span class="s">'X-ACO-Signature'</span>] = <span class="s">`sha256=${sig}`</span>
+headers[<span class="s">'X-ACO-Timestamp'</span>] = Date.<span class="fn">now</span>().<span class="fn">toString</span>()</code></pre></div>
+</section>
+
+<!-- ═══════════════════════════════════ PHASE 7 -->
+<section id="p7">
+<div class="phase">
+  <div class="phase-n">07</div>
+  <div>
+    <div class="phase-name">SaaS &amp; Multi-Tenancy Layer</div>
+    <div class="phase-wk">Weeks 20–28</div>
+    <div class="phase-desc">Reseller account management, Stripe metering + billing, usage cap enforcement, per-tenant branding, custom domain routing. Data model supports this from day one — this phase wires the UI and billing.</div>
+    <div class="phase-tags"><span class="chip">apps/api</span><span class="chip">apps/web/admin</span><span class="chip">Stripe</span></div>
+  </div>
+</div>
+
+<h3 id="p7-tenancy">Tenant Isolation</h3>
+<div class="danger"><b>Rule:</b> Every single database query in the API layer MUST include <code>.where(eq(table.tenantId, req.tenantId))</code>. Enforce this with an integration test: create User A (Tenant 1), create User B (Tenant 2), assert that User B cannot GET/PATCH/DELETE any resource owned by Tenant 1, even with a valid JWT.</div>
+
+<h3 id="p7-billing">Stripe Integration</h3>
+<div class="code-block">
+<div class="code-head"><span class="file">apps/api/src/routes/stripe-webhook.ts</span><span class="lang">TypeScript</span></div>
+<pre><code><span class="k">import</span> Stripe <span class="k">from</span> <span class="s">'stripe'</span>
+<span class="k">const</span> stripe = <span class="k">new</span> <span class="fn">Stripe</span>(process.env.STRIPE_SECRET_KEY!)
+
+app.<span class="fn">post</span>(<span class="s">'/stripe/webhook'</span>, { config: { rawBody: <span class="k">true</span> } }, <span class="k">async</span> (req, reply) => {
+  <span class="k">const</span> sig = req.headers[<span class="s">'stripe-signature'</span>] <span class="k">as string</span>
+  <span class="k">let</span> event: Stripe.Event
+  <span class="k">try</span> {
+    event = stripe.webhooks.<span class="fn">constructEvent</span>(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET!)
+  } <span class="k">catch</span> {
+    <span class="k">return</span> reply.<span class="fn">code</span>(<span class="n">400</span>).<span class="fn">send</span>(<span class="s">'Bad signature'</span>)
+  }
+
+  <span class="k">const</span> tenantId = (event.data.object <span class="k">as any</span>).metadata?.tenantId
+  <span class="k">if</span> (!tenantId) <span class="k">return</span> reply.<span class="fn">send</span>({ received: <span class="k">true</span> })
+
+  <span class="k">switch</span> (event.type) {
+    <span class="k">case</span> <span class="s">'customer.subscription.deleted'</span>:
+      <span class="k">await</span> <span class="fn">suspendTenant</span>(tenantId, db)
+      <span class="k">break</span>
+    <span class="k">case</span> <span class="s">'customer.subscription.updated'</span>:
+      <span class="k">await</span> <span class="fn">syncTenantPlan</span>(tenantId, event.data.object <span class="k">as</span> Stripe.Subscription, db)
+      <span class="k">break</span>
+    <span class="k">case</span> <span class="s">'invoice.payment_failed'</span>:
+      <span class="k">await</span> <span class="fn">notifyResellerPaymentFailed</span>(tenantId)
+      <span class="k">break</span>
+  }
+  reply.<span class="fn">send</span>({ received: <span class="k">true</span> })
+})
+
+<span class="c">// Called after every completed checkout task</span>
+<span class="k">export async function</span> <span class="fn">reportUsage</span>(tenantId: <span class="t">string</span>) {
+  <span class="k">const</span> tenant = <span class="k">await</span> <span class="fn">getTenant</span>(tenantId, db)
+  <span class="k">if</span> (!tenant.stripeCustomerId) <span class="k">return</span>
+  <span class="k">await</span> stripe.billing.meterEvents.<span class="fn">create</span>({
+    event_name: <span class="s">'aco_checkout_task'</span>,
+    payload: { stripe_customer_id: tenant.stripeCustomerId, value: <span class="s">'1'</span> },
+    timestamp: Math.<span class="fn">floor</span>(Date.<span class="fn">now</span>() / <span class="n">1000</span>),
+  })
+}
+
+<span class="c">// Usage cap — checked before task intake</span>
+<span class="k">export async function</span> <span class="fn">checkUsageCap</span>(tenantId: <span class="t">string</span>) {
+  <span class="k">const</span> limits = <span class="k">await</span> <span class="fn">getTenantLimits</span>(tenantId)
+  <span class="k">const</span> key = <span class="s">`usage:daily:${tenantId}:${new Date().toISOString().slice(0,10)}`</span>
+  <span class="k">const</span> count = <span class="k">await</span> redis.<span class="fn">incr</span>(key)
+  <span class="k">await</span> redis.<span class="fn">expire</span>(key, <span class="n">86400</span>)
+  <span class="k">if</span> (count > limits.dailyTasks)
+    <span class="k">throw new</span> <span class="fn">ApiError</span>(<span class="n">429</span>, <span class="s">'Daily task limit reached for this tenant'</span>)
+}</code></pre></div>
+</section>
+
+<hr>
+
+<!-- ═══════════════════════════════════ MONITORING -->
+<section id="monitoring">
+<div class="s-label">Reference</div>
+<h2>Logging &amp; Monitoring</h2>
+
+<h3>Structured log fields (every log line)</h3>
+<div class="code-block"><div class="code-head"><span class="lang">JSON</span></div>
+<pre><code>{
+  "level":     "info",
+  "time":      "2026-10-08T12:00:00Z",
+  "requestId": "req_abc123",
+  "tenantId":  "uuid",
+  "userId":    "uuid",
+  "taskId":    "uuid",      <span class="c">// present on worker logs</span>
+  "workerId":  "dominos-0", <span class="c">// present on worker logs</span>
+  "retailer":  "dominos",
+  "msg":       "Task state changed",
+  "state":     "PROCESSING"
+}</code></pre></div>
+
+<h3>Prometheus metrics to expose</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Metric</th><th>Type</th><th>Labels</th></tr></thead>
+<tbody>
+<tr><td><code>aco_queue_depth</code></td><td>Gauge</td><td>retailer</td></tr>
+<tr><td><code>aco_tasks_started_total</code></td><td>Counter</td><td>retailer, tenant</td></tr>
+<tr><td><code>aco_tasks_completed_total</code></td><td>Counter</td><td>retailer, state (confirmed|failed)</td></tr>
+<tr><td><code>aco_task_duration_seconds</code></td><td>Histogram</td><td>retailer</td></tr>
+<tr><td><code>aco_worker_count</code></td><td>Gauge</td><td>retailer</td></tr>
+<tr><td><code>aco_worker_heap_mb</code></td><td>Gauge</td><td>worker_id</td></tr>
+<tr><td><code>aco_captcha_solves_total</code></td><td>Counter</td><td>type, method (auto|user)</td></tr>
+<tr><td><code>aco_payment_declines_total</code></td><td>Counter</td><td>retailer</td></tr>
+<tr><td><code>aco_proxy_health_ratio</code></td><td>Gauge</td><td>tenant</td></tr>
+<tr><td><code>aco_webhook_deliveries_total</code></td><td>Counter</td><td>event, outcome (success|failed)</td></tr>
+</tbody>
+</table></div>
+
+<div class="tip"><b>Alert rules to configure:</b> (1) queue depth > 100 for any retailer for >5 min, (2) task failure rate > 20% for any retailer over 10 min window, (3) any worker heap > 500 MB, (4) all proxies for a tenant unhealthy, (5) webhook delivery failure rate > 50%.</div>
+</section>
+
+<!-- ═══════════════════════════════════ SECURITY -->
+<section id="security">
+<div class="s-label">Reference</div>
+<h2>Security Checklist</h2>
+<ul class="cl">
+  <li><b>Card encryption</b> — AES-256-GCM with per-value random IV. Key only in Doppler. Never in code, logs, or stack traces</li>
+  <li><b>ESLint no-card-log rule</b> — Custom rule that flags any <code>log.*</code> / <code>console.*</code> call with args containing 'pan', 'cvv', 'card_number', or 'encryption_key'</li>
+  <li><b>Tenant isolation test</b> — Integration test: User A cannot access Tenant B's resources via any API endpoint, even with valid JWT</li>
+  <li><b>API key entropy</b> — 32 random bytes (256 bits), prefixed <code>aco_</code>. Store only SHA-256 hash in DB</li>
+  <li><b>JWT short-lived</b> — 7 day expiry, refresh token pattern for the web dashboard</li>
+  <li><b>Webhook HMAC</b> — Sign payloads with HMAC-SHA256. Document verification for customers</li>
+  <li><b>Rate limiting</b> — Per-API-key sliding window in Redis. Configurable per key by reseller</li>
+  <li><b>SQL injection</b> — Drizzle uses parameterised queries throughout. Never string-concatenate into SQL</li>
+  <li><b>SSRF prevention</b> — Webhook URLs validated against allowlist of protocols (https only); reject private IP ranges</li>
+  <li><b>Redis ACLs</b> — Separate Redis users for queue vs cache vs pubsub with minimal permissions</li>
+  <li><b>Worker isolation</b> — Each worker is a separate child process; a compromised worker cannot access other tenants' sessions</li>
+  <li><b>Dependencies</b> — <code>npm audit</code> in CI pipeline; Dependabot PRs auto-opened for security patches</li>
+  <li><b>Secrets rotation</b> — Document key rotation procedure for CARD_ENCRYPTION_KEY (re-encrypt all cards on rotation)</li>
+</ul>
+</section>
+
+<!-- ═══════════════════════════════════ SPRINT PLAN -->
+<section id="sprint">
+<div class="s-label">Reference</div>
+<h2>Sprint Plan (2-week sprints)</h2>
+
+<div class="sprint-row"><span class="sw">Sprint 1–2<br>Wk 1–4</span><div class="sd"><b>Foundation: repo, infra, DB, auth, CRUD API</b>Turborepo setup; Docker Compose dev stack; full Drizzle schema; JWT + API key auth; CRUD routes for all entities; proxy bulk import; card bulk import with encryption; Pino + Loki</div></div>
+<div class="sprint-row"><span class="sw">Sprint 3–4<br>Wk 5–8</span><div class="sd"><b>Checkout Engine: queue, state machine, worker</b>BullMQ per-retailer queues; XState machine with event logging; worker supervisor; worker-process; retry classifier; mock adapter; Prometheus metrics; SSE pub/sub</div></div>
+<div class="sprint-row"><span class="sw">Sprint 5–6<br>Wk 9–12</span><div class="sd"><b>Browser Layer + Proxy + CAPTCHA</b>Playwright session factory; stealth plugin + fingerprint injection; proxy parser + pool + health scheduler; CAPTCHA detector; 2captcha + CapSolver clients; user-assist flow via Redis</div></div>
+<div class="sprint-row"><span class="sw">Sprint 6–7<br>Wk 11–13</span><div class="sd"><b>Payment System</b>AES-256-GCM vault; card cycling; Redis order lock; 3DS detection + pause/resume; bulk CSV import; decline recording; card status tracking</div></div>
+<div class="sprint-row"><span class="sw">Sprint 7–9<br>Wk 13–17</span><div class="sd"><b>Retailer Adapters Batch 1 (6 retailers)</b>Domino's, Shake Shack, Wingstop, Five Guys, Panda Express, Jersey Mike's — each with discovery spec, adapter, stealth tune, integration test</div></div>
+<div class="sprint-row"><span class="sw">Sprint 10–11<br>Wk 18–21</span><div class="sd"><b>Retailer Adapters Batch 2 (4 retailers) + Discord Bot</b>Buffalo Wild Wings, Applebee's, IHOP, Insomnia Cookies; Discord bot slash commands + embeds + DM notifications</div></div>
+<div class="sprint-row"><span class="sw">Sprint 12<br>Wk 21–22</span><div class="sd"><b>Retailer Adapters Batch 3 (2 retailers) + Web Dashboard start</b>Whataburger, Wawa; Next.js app scaffold, auth pages, dashboard home + task list</div></div>
+<div class="sprint-row"><span class="sw">Sprint 13–14<br>Wk 22–25</span><div class="sd"><b>Web Dashboard + External API + Webhooks</b>All dashboard pages; SSE live task view; bulk upload UIs; all REST API endpoints; webhook delivery worker; OpenAPI spec</div></div>
+<div class="sprint-row"><span class="sw">Sprint 15<br>Wk 25–26</span><div class="sd"><b>Uber Eats adapter — Group Order flow</b>URL validation + group order join + session management + payment entry + humanReviewPause() humanisation + submit race + order ID extraction + Discord /checkout group_order_url option + E2E test against real group order link</div></div>
+<div class="sprint-row"><span class="sw">Sprint 16<br>Wk 26–27</span><div class="sd"><b>Instacart adapter</b>Requires prior client discovery session; adapter implementation depends on documented flow</div></div>
+<div class="sprint-row"><span class="sw">Sprint 17–18<br>Wk 27–30</span><div class="sd"><b>SaaS Layer: multi-tenancy UI, Stripe, branding, custom domains</b>Reseller admin panel; Stripe metering + webhook handler; tenant suspension; branding config; Nginx custom domain routing</div></div>
+<div class="sprint-row"><span class="sw">Sprint 19–20<br>Wk 31–32</span><div class="sd"><b>Hardening + Load testing + Launch prep</b>Worker memory leak testing; load test 100+ concurrent tasks; all 14 retailer regression tests green; monitoring dashboards complete; runbook written</div></div>
+</section>
+
+<!-- ═══════════════════════════════════ RISKS -->
+<section id="risks">
+<div class="s-label">Reference</div>
+<h2>Technical Risks</h2>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Risk</th><th>Impact</th><th>What to do</th></tr></thead>
+<tbody>
+<tr>
+  <td><b>Retailer updates checkout UI</b><br><small>Selectors break, adapter fails silently</small></td>
+  <td style="color:var(--red);font-family:var(--mono);font-size:11px">HIGH</td>
+  <td>Nightly CI regression per retailer. Grafana alert on failure-rate spike. Keep selectors in a config object at top of each adapter, not scattered inline — one place to update.</td>
+</tr>
+<tr>
+  <td><b>Playwright fingerprint detected</b><br><small>Sessions blocked by retailer bot detection</small></td>
+  <td style="color:var(--red);font-family:var(--mono);font-size:11px">HIGH</td>
+  <td>Test each adapter against <code>bot.sannysoft.com</code> and <code>pixelscan.net</code> before touching the real retailer. Customise stealth config per-retailer — default configs are known. Budget ongoing stealth maintenance.</td>
+</tr>
+<tr>
+  <td><b>Worker memory leak</b><br><small>Long-running Playwright processes grow unboundedly</small></td>
+  <td style="color:var(--yellow);font-family:var(--mono);font-size:11px">MED</td>
+  <td>Restart workers after WORKER_MAX_TASKS completions. Always call <code>session.close()</code> in a <code>finally</code> block — never leak a browser. Alert if heap exceeds 500 MB.</td>
+</tr>
+<tr>
+  <td><b>Redis single point of failure</b><br><small>Queue + locks + session cache all lost</small></td>
+  <td style="color:var(--yellow);font-family:var(--mono);font-size:11px">MED</td>
+  <td>Enable AOF persistence in production. Use Redis Sentinel for HA. BullMQ jobs survive restart if persistence is on.</td>
+</tr>
+<tr>
+  <td><b>Duplicate orders on network failure</b><br><small>Payment charged, confirmation page not reached</small></td>
+  <td style="color:var(--yellow);font-family:var(--mono);font-size:11px">MED</td>
+  <td>Redis NX lock before submit. If confirmation page not reached within timeout → transition to ORDER_VERIFICATION_PENDING, notify user to check manually. Never auto-retry the payment step.</td>
+</tr>
+<tr>
+  <td><b>Instacart promo flow undocumented</b><br><small>Non-standard payment mechanism blocks build</small></td>
+  <td style="color:var(--yellow);font-family:var(--mono);font-size:11px">MED</td>
+  <td>Do not estimate or start Instacart until client provides full flow documentation. Schedule discovery session as a hard blocker in Sprint 16.</td>
+</tr>
+<tr>
+  <td><b>PAN encryption key compromise</b><br><small>All stored card data exposed</small></td>
+  <td style="color:var(--red);font-family:var(--mono);font-size:11px">HIGH (if not managed)</td>
+  <td>Key only in Doppler. Never in git, logs, or error messages. Rotate quarterly — document re-encryption procedure upfront. Consider Basis Theory if PCI scope is a concern.</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+
+</main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('section[id]')
+const links = document.querySelectorAll('.nav a')
+const obs = new IntersectionObserver(e => {
+  e.forEach(en => {
+    if (en.isIntersecting) {
+      links.forEach(l => l.classList.remove('on'))
+      const a = document.querySelector(`.nav a[href="#${en.target.id}"]`)
+      if (a) a.classList.add('on')
+    }
+  })
+}, { rootMargin: '-10% 0px -80% 0px' })
+secs.forEach(s => obs.observe(s))
+</script>
+</body>
+</html>

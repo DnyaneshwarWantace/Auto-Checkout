@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ACO Platform — Full Project Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0c10;--s1:#0f1318;--s2:#151a21;--s3:#1a2028;
+  --brd:#1e2530;--brd2:#252e3d;--brd3:#2d3748;
+  --tx:#e8edf4;--tx2:#94a3b8;--tx3:#64748b;--tx4:#475569;
+  --bl:#3b82f6;--bl-d:rgba(59,130,246,.12);--bl-b:rgba(59,130,246,.28);
+  --gn:#10b981;--gn-d:rgba(16,185,129,.1);--gn-b:rgba(16,185,129,.28);
+  --am:#f59e0b;--am-d:rgba(245,158,11,.1);--am-b:rgba(245,158,11,.28);
+  --rd:#ef4444;--rd-d:rgba(239,68,68,.1);--rd-b:rgba(239,68,68,.28);
+  --pp:#a78bfa;--pp-d:rgba(167,139,250,.1);
+  --mono:'IBM Plex Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:15px;line-height:1.75;-webkit-font-smoothing:antialiased}
+
+/* ── LAYOUT ─────────────────────────────── */
+.shell{display:flex;min-height:100vh}
+.sidebar{width:268px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;background:var(--s1);border-right:1px solid var(--brd);scrollbar-width:thin;scrollbar-color:var(--brd3) transparent}
+.sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-thumb{background:var(--brd3);border-radius:2px}
+.sb-top{padding:24px 20px 20px;border-bottom:1px solid var(--brd)}
+.sb-eyebrow{font-family:var(--mono);font-size:9px;color:var(--bl);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.sb-title{font-size:14px;font-weight:600;color:var(--tx);line-height:1.3}
+.sb-date{font-family:var(--mono);font-size:10px;color:var(--tx3);margin-top:4px}
+.sb-sec{font-family:var(--mono);font-size:9px;color:var(--tx3);letter-spacing:.12em;text-transform:uppercase;padding:14px 20px 4px}
+.sidebar nav a{display:flex;align-items:center;gap:9px;padding:5px 20px;font-size:12px;color:var(--tx3);text-decoration:none;border-left:2px solid transparent;transition:all .12s;line-height:1.45}
+.sidebar nav a:hover{color:var(--tx);background:var(--s2)}
+.sidebar nav a.on{color:var(--bl);border-left-color:var(--bl);background:var(--bl-d)}
+.sidebar nav a.sub{padding-left:32px;font-size:11px;color:var(--tx4)}
+.sidebar nav a.sub:hover{color:var(--tx3)}.sidebar nav a.sub.on{color:var(--bl)}
+.sidebar .dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dot-bl{background:var(--bl)}.dot-gn{background:var(--gn)}.dot-am{background:var(--am)}.dot-rd{background:var(--rd)}.dot-pp{background:var(--pp)}
+
+.main{margin-left:268px;flex:1;padding:52px 56px 160px;max-width:1000px}
+
+/* ── TYPE ────────────────────────────────── */
+.pg-kicker{font-family:var(--mono);font-size:10px;color:var(--bl);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.pg-title{font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:14px}
+.pg-title span{color:var(--bl)}
+.pg-sub{font-size:16px;color:var(--tx2);max-width:64ch;line-height:1.7;margin-bottom:32px}
+.badge-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--brd)}
+.bdg{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:4px;border:1px solid}
+.bdg-bl{color:var(--bl);border-color:var(--bl-b);background:var(--bl-d)}
+.bdg-gn{color:var(--gn);border-color:var(--gn-b);background:var(--gn-d)}
+.bdg-am{color:var(--am);border-color:var(--am-b);background:var(--am-d)}
+
+section{margin-bottom:80px;scroll-margin-top:32px}
+.s-eye{font-family:var(--mono);font-size:10px;color:var(--bl);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+h2{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--brd)}
+h3{font-size:16px;font-weight:600;color:var(--tx);margin:32px 0 14px}
+h3:first-child{margin-top:0}
+h4{font-size:13px;font-weight:600;color:var(--tx2);margin:20px 0 8px;text-transform:uppercase;letter-spacing:.04em}
+p{color:var(--tx2);margin-bottom:14px;max-width:74ch;line-height:1.75}
+p:last-child{margin-bottom:0}
+a{color:var(--bl);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── TABLES ──────────────────────────────── */
+.tw{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);padding:10px 14px;border-bottom:1px solid var(--brd);text-align:left;white-space:nowrap;background:var(--s1)}
+td{padding:10px 14px;border-bottom:1px solid var(--brd);color:var(--tx2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.015)}
+td b,td strong{color:var(--tx);font-weight:500}
+td code{font-family:var(--mono);font-size:11px;color:var(--pp);background:var(--pp-d);padding:1px 5px;border-radius:3px}
+
+/* ── CALLOUTS ────────────────────────────── */
+.callout{border-radius:0 7px 7px 0;padding:16px 20px;margin:18px 0;font-size:14px;color:var(--tx2);line-height:1.7}
+.callout b,.callout strong{display:block;margin-bottom:4px;font-weight:600}
+.callout-bl{border-left:3px solid var(--bl);background:var(--bl-d)}
+.callout-bl strong{color:var(--bl)}
+.callout-gn{border-left:3px solid var(--gn);background:var(--gn-d)}
+.callout-gn strong{color:var(--gn)}
+.callout-am{border-left:3px solid var(--am);background:var(--am-d)}
+.callout-am strong{color:var(--am)}
+.callout-rd{border-left:3px solid var(--rd);background:var(--rd-d)}
+.callout-rd strong{color:var(--rd)}
+
+/* ── CARDS ───────────────────────────────── */
+.card{background:var(--s1);border:1px solid var(--brd);border-radius:8px;padding:22px 26px;margin:16px 0}
+.card-eye{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.card-eye-bl{color:var(--bl)}.card-eye-gn{color:var(--gn)}.card-eye-am{color:var(--am)}.card-eye-rd{color:var(--rd)}
+.card h3{font-size:15px;margin:0 0 10px}
+
+/* ── FLOW ────────────────────────────────── */
+.flow{background:var(--s1);border:1px solid var(--brd);border-radius:7px;padding:18px 20px;margin:16px 0}
+.flow-lbl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3);margin-bottom:12px}
+.states{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:8px}
+.states:last-child{margin-bottom:0}
+.st{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:4px;border:1px solid var(--brd2);color:var(--tx2);white-space:nowrap}
+.st.b{color:var(--bl);border-color:var(--bl-b);background:var(--bl-d)}
+.st.g{color:var(--gn);border-color:var(--gn-b);background:var(--gn-d)}
+.st.a{color:var(--am);border-color:var(--am-b);background:var(--am-d)}
+.st.r{color:var(--rd);border-color:var(--rd-b);background:var(--rd-d)}
+.st.p{color:var(--pp);border-color:rgba(167,139,250,.3);background:var(--pp-d)}
+.arr{color:var(--tx3);font-size:15px;flex-shrink:0}
+
+/* ── GRID ────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+.mc{background:var(--s1);border:1px solid var(--brd);border-radius:7px;padding:16px 18px}
+.mc-t{font-family:var(--mono);font-size:11px;font-weight:500;margin-bottom:10px}
+.mc-t-bl{color:var(--bl)}.mc-t-gn{color:var(--gn)}.mc-t-am{color:var(--am)}.mc-t-rd{color:var(--rd)}
+.mc ul{list-style:none}
+.mc li{font-size:13px;color:var(--tx2);padding:3px 0 3px 14px;position:relative;line-height:1.5}
+.mc li::before{content:'·';position:absolute;left:2px;color:var(--tx3)}
+
+/* ── LISTS ───────────────────────────────── */
+ul.plain{list-style:none;margin:10px 0}
+ul.plain li{color:var(--tx2);padding:4px 0 4px 18px;position:relative;font-size:14px;line-height:1.6}
+ul.plain li::before{content:'→';position:absolute;left:0;color:var(--bl);font-size:12px;top:6px}
+
+/* ── DAILY OPS TABLE ─────────────────────── */
+.ops-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-bottom:1px solid var(--brd)}
+.ops-row:last-child{border-bottom:none}
+.ops-row:first-child{background:var(--s2)}
+.ops-cell{padding:12px 14px;font-size:13px;color:var(--tx2);border-right:1px solid var(--brd)}
+.ops-cell:last-child{border-right:none}
+.ops-cell.hd{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--tx3)}
+.ops-cell b{color:var(--tx);font-weight:500;display:block;margin-bottom:3px}
+.ops-cell .fix{font-family:var(--mono);font-size:10px;color:var(--gn)}
+
+/* ── STACK TABLE ─────────────────────────── */
+.stack-row{display:grid;grid-template-columns:160px 200px 1fr;gap:0;border-bottom:1px solid var(--brd);align-items:start}
+.stack-row:last-child{border-bottom:none}
+.stack-cell{padding:11px 14px;font-size:13px;color:var(--tx2)}
+.stack-cell.layer{font-family:var(--mono);font-size:11px;color:var(--bl)}
+.stack-cell.choice{font-weight:500;color:var(--tx)}
+.stack-cell.why{color:var(--tx2)}
+
+/* ── RETAILER CHIPS ──────────────────────── */
+.retailer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0}
+.rc{background:var(--s1);border:1px solid var(--brd);border-radius:6px;padding:11px 14px}
+.rc .type{font-family:var(--mono);font-size:9px;color:var(--tx3);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em}
+.rc .name{font-size:13px;color:var(--tx2)}
+
+/* ── CERTAINTY SPECTRUM ──────────────────── */
+.certainty-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:12px 0}
+.cb-sure{background:var(--gn);flex:3}
+.cb-likely{background:var(--am);flex:1.5}
+.cb-uncertain{background:var(--rd);flex:.5}
+.cb-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--tx3);margin-bottom:16px}
+
+/* ── CODE (inline only) ──────────────────── */
+:not(pre)>code{font-family:var(--mono);font-size:11px;background:var(--s2);border:1px solid var(--brd2);padding:1px 5px;border-radius:3px;color:var(--pp)}
+
+hr{border:none;border-top:1px solid var(--brd);margin:56px 0}
+
+@media(max-width:900px){
+  .sidebar{display:none}.main{margin-left:0;padding:32px 24px 100px}
+  .g2,.g3{grid-template-columns:1fr}.stack-row{grid-template-columns:1fr}
+  .ops-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ══════ SIDEBAR ══════════════════════════ -->
+<aside class="sidebar">
+  <div class="sb-top">
+    <div class="sb-eyebrow">Project Brief</div>
+    <div class="sb-title">ACO Platform —<br>Complete Client Reference</div>
+    <div class="sb-date">October 2026 · Confidential</div>
+  </div>
+  <nav>
+    <div class="sb-sec">The Goal</div>
+    <a href="#goal"><span class="dot dot-bl"></span>What We're Building &amp; Why</a>
+    <a href="#competitive"><span class="dot dot-bl"></span>How We Win</a>
+
+    <div class="sb-sec">What We Can Build</div>
+    <a href="#confirmed"><span class="dot dot-gn"></span>Confirmed Deliverables</a>
+    <a href="#stack-prebuilt"><span class="dot dot-gn"></span>Pre-Built Tools We Use</a>
+    <a href="#interfaces"><span class="dot dot-gn"></span>Discord Bot + API</a>
+    <a href="#billing"><span class="dot dot-gn"></span>Billing &amp; Cards</a>
+    <a href="#proxies"><span class="dot dot-gn"></span>Proxy Support</a>
+    <a href="#retailers"><span class="dot dot-gn"></span>Retailer Integrations</a>
+    <a href="#instacart-section"><span class="dot dot-gn"></span>Instacart</a>
+    <a href="#advanced-caps"><span class="dot dot-gn"></span>Advanced Capabilities</a>
+
+    <div class="sb-sec">What We Can't Promise</div>
+    <a href="#cant-promise"><span class="dot dot-am"></span>Honest Uncertainty</a>
+
+    <div class="sb-sec">Day-to-Day Reality</div>
+    <a href="#daily-ops"><span class="dot dot-am"></span>What Will Go Wrong &amp; When</a>
+    <a href="#quick-fixes"><span class="dot dot-am"></span>Quick-Fix Playbook</a>
+    <a href="#monitoring-ops"><span class="dot dot-am"></span>How We Stay on Top of It</a>
+
+    <div class="sb-sec">Getting Started</div>
+    <a href="#next-steps"><span class="dot dot-pp"></span>What We Need From You</a>
+  </nav>
+</aside>
+
+<!-- ══════ MAIN ══════════════════════════════ -->
+<main class="main">
+
+<!-- PAGE HEADER -->
+<div class="pg-kicker">ACO Platform · Project Brief</div>
+<div class="pg-title">The full picture — <span>what we're building,<br>what's hard, and what to expect</span></div>
+<div class="pg-sub">A straight read of the platform from start to finish. What we can build, what tools already exist that we're using, where things will need ongoing attention, and what to do when something breaks.</div>
+<div class="badge-row">
+  <span class="bdg bdg-bl">14 Retailer Integrations</span>
+  <span class="bdg bdg-bl">Discord Bot + Web API</span>
+  <span class="bdg bdg-bl">Multi-Tenant SaaS</span>
+  <span class="bdg bdg-gn">Built on Proven Tools</span>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     THE GOAL
+════════════════════════════════════════════ -->
+<section id="goal">
+<div class="s-eye">The Goal</div>
+<h2>What We're Building &amp; Why</h2>
+<p>Every ACO that exists right now is Discord-only. That works fine for personal use, but it's a real limitation for anyone trying to run this as a business — because it means every customer has to be in your server, learn the bot, and stay inside Discord to place an order. That's friction you don't need.</p>
+<p>Two things are driving this build. First, the Discord bot needs to be as good as what's already out there — same ease of use, same speed, same command UX that people are used to. Second, and this is the part nobody else has done yet: a secure API that any website can plug into, so customers on a reseller's site never have to touch Discord at all.</p>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-eye card-eye-bl">Discord — match the best</div>
+    <h3>The bot has to feel familiar on day one</h3>
+    <p>People using the current ACOs are comfortable with them. Slash commands, clean embeds, live status updates, DMs when something needs attention. We're matching all of that and building on top of it — not asking anyone to learn something new from scratch.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-gn">The API — what nobody else has</div>
+    <h3>Resellers can build their own storefront</h3>
+    <p>A reseller integrates the API once. Their customers order through the reseller's website. The platform handles checkout in the background. Customer never needs Discord. Reseller gets full control over their own experience. This is what changes the business model.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HOW WE WIN
+════════════════════════════════════════════ -->
+<section id="competitive">
+<div class="s-eye">The Goal</div>
+<h2>How This Compares to What's Already Out There</h2>
+<p>Based on the two ACOs you're using — here's where this platform sits against them.</p>
+
+<div class="tw"><table>
+<thead><tr><th>Capability</th><th>Current ACOs</th><th>This Platform</th></tr></thead>
+<tbody>
+<tr><td><b>Interfaces</b></td><td>Discord bot only</td><td>Discord bot + secure web API + web dashboard</td></tr>
+<tr><td><b>Reseller setup</b></td><td>Manual per-customer</td><td>Fully automated via API — customer never touches Discord</td></tr>
+<tr><td><b>Card management</b></td><td>Limited — typically one card or basic cycling</td><td>Bulk card upload, cycling, per-profile ordering, status tracking</td></tr>
+<tr><td><b>Proxy support</b></td><td>Basic formats only</td><td>Every format, session proxies, health checking, rotation</td></tr>
+<tr><td><b>Store coverage</b></td><td>Varies — mostly common chains</td><td>12 direct + Uber Eats + Instacart (14 total)</td></tr>
+<tr><td><b>Multi-tenancy</b></td><td>None — flat access</td><td>Full reseller model: tenants, usage caps, branding, billing</td></tr>
+<tr><td><b>Verification handling</b></td><td>Often manual CAPTCHA</td><td>Auto-solve with user-assist fallback, 3DS handling</td></tr>
+<tr><td><b>Transparency</b></td><td>Closed — no insight into failures</td><td>Full audit log, live task state, order history, Grafana monitoring</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════
+     CONFIRMED DELIVERABLES
+════════════════════════════════════════════ -->
+<section id="confirmed">
+<div class="s-eye">What We Can Build</div>
+<h2>What We're Building</h2>
+<p>These are the things we're fully committing to. None of this is speculative — every item here uses mature, established tooling and patterns we've already worked through in detail.</p>
+
+<div class="g3">
+  <div class="mc">
+    <div class="mc-t mc-t-gn">Core platform</div>
+    <ul class="mc">
+      <li>Discord bot with full command UI</li>
+      <li>Secure REST API</li>
+      <li>Web dashboard</li>
+      <li>Multi-tenant / reseller system</li>
+      <li>API keys + webhook delivery</li>
+      <li>Stripe billing + usage metering</li>
+    </ul>
+  </div>
+  <div class="mc">
+    <div class="mc-t mc-t-gn">User features</div>
+    <ul class="mc">
+      <li>Profiles with addresses</li>
+      <li>Multi-card storage (encrypted)</li>
+      <li>Bulk card CSV upload</li>
+      <li>Card cycling on decline</li>
+      <li>Proxy pool management</li>
+      <li>Bulk proxy import</li>
+    </ul>
+  </div>
+  <div class="mc">
+    <div class="mc-t mc-t-gn">Checkout engine</div>
+    <ul class="mc">
+      <li>Task queue with priorities</li>
+      <li>Full checkout state machine</li>
+      <li>Retry + backoff logic</li>
+      <li>CAPTCHA auto-solve</li>
+      <li>User-assist CAPTCHA fallback</li>
+      <li>Order audit log</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PRE-BUILT TOOLS
+════════════════════════════════════════════ -->
+<section id="stack-prebuilt">
+<div class="s-eye">What We Can Build</div>
+<h2>Tools That Already Exist — We're Not Reinventing Any of This</h2>
+<p>A lot of what makes this platform work is already built and battle-tested. We wire these tools together rather than building from scratch. That keeps the infrastructure risk low and puts the real engineering effort where it belongs — on the retailer integrations, which nobody has pre-built for us.</p>
+
+<div class="card">
+  <div class="card-eye card-eye-gn">Already exists — we wire it together, not rebuild it</div>
+  <div class="stack-row" style="font-size:12px;background:var(--s2)">
+    <div class="stack-cell layer">Layer</div>
+    <div class="stack-cell choice" style="color:var(--tx3)">Tool</div>
+    <div class="stack-cell why" style="color:var(--tx3)">What it gives us</div>
+  </div>
+  <div class="stack-row"><div class="stack-cell layer">Browser automation</div><div class="stack-cell choice">Playwright + Stealth plugin</div><div class="stack-cell why">Headless Chrome that retailers can't trivially detect as a bot. Mature, widely used, actively maintained. We configure it — we don't build it.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Task queue</div><div class="stack-cell choice">BullMQ + Redis</div><div class="stack-cell why">Priority queues, retry scheduling, concurrency limits, delayed jobs — all built-in. Used in production by very large platforms. We use it, not reinvent it.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Database</div><div class="stack-cell choice">PostgreSQL + Drizzle ORM</div><div class="stack-cell why">The most reliable open-source database in the world. Drizzle gives us typed queries and migration management.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">CAPTCHA solving</div><div class="stack-cell choice">2Captcha + CapSolver</div><div class="stack-cell why">Established third-party services that solve reCAPTCHA, hCaptcha, Turnstile, and Arkose. We call their APIs — we don't solve CAPTCHAs ourselves.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Discord bot</div><div class="stack-cell choice">discord.js v14</div><div class="stack-cell why">The standard Node.js Discord library. Slash commands, embeds, DMs — all off-the-shelf.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">API server</div><div class="stack-cell choice">Fastify</div><div class="stack-cell why">Fast, schema-validated REST API framework. Rate limiting, auth plugins, webhook dispatch — all available as plugins.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Web dashboard</div><div class="stack-cell choice">Next.js 14</div><div class="stack-cell why">The leading React framework. Server-rendered pages, real-time updates, mobile-responsive — standard toolkit.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Billing</div><div class="stack-cell choice">Stripe</div><div class="stack-cell why">Subscriptions, usage-based billing, webhook-driven tenant lifecycle. PCI-handled by Stripe, not us.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Monitoring</div><div class="stack-cell choice">Prometheus + Grafana</div><div class="stack-cell why">Industry-standard metrics and dashboards. Queue depth, worker health, checkout success rates, CAPTCHA costs — all visible in real time.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Logging</div><div class="stack-cell choice">Pino + Loki</div><div class="stack-cell why">Structured logs queryable by task, tenant, retailer, or worker. Searchable in Grafana.</div></div>
+  <div class="stack-row"><div class="stack-cell layer">Infrastructure</div><div class="stack-cell choice">Docker + VPS</div><div class="stack-cell why">Self-contained containers on a VPS. Discord bot and API can share infrastructure or run separately per your preference — both work.</div></div>
+</div>
+
+<div class="callout callout-gn">
+The infrastructure here is not where the unknowns are. All of this is production-proven. The real questions are in the retailer integrations — how each site responds to automated traffic, what detection they run, how their checkout flows behave. That's where careful work happens. The platform underneath it is solid ground.
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     INTERFACES
+════════════════════════════════════════════ -->
+<section id="interfaces">
+<div class="s-eye">What We Can Build</div>
+<h2>Discord Bot + Secure API</h2>
+<p>Both run off the same backend. They can share a VPS or sit on separate servers — separate is slightly faster under heavy API load, but for most setups shared is simpler and works fine. Either way, adding one doesn't complicate the other.</p>
+
+<h3>Discord bot</h3>
+<p>Slash commands throughout — no text syntax to memorise. Selection menus, confirmation prompts, live status embeds that update as a checkout runs. If you're comfortable with the bots you're currently using, this will feel familiar from the first session.</p>
+<ul class="plain">
+  <li><code>/checkout</code> — start a task, choose retailer, profile, items from menus</li>
+  <li><code>/status</code> — live state of an active task, updates in-embed</li>
+  <li><code>/cancel</code> — cancel a queued or in-progress task</li>
+  <li><code>/profiles</code> — create, list, switch profiles</li>
+  <li><code>/cards</code> — add, remove, view cards (masked)</li>
+  <li><code>/proxies</code> — add, bulk-add, view health, remove</li>
+  <li><code>/orders</code> — order history with retailer, total, status</li>
+</ul>
+<p>Discord DM notifications fire automatically when: a CAPTCHA requires the user's attention, a payment is declined, an order is confirmed or fails. The user is never left wondering what happened.</p>
+
+<h3>The API</h3>
+<p>Everything in the Discord bot is also available through the API. A reseller integrates it once — their customers order through whatever website they build, the API handles checkout in the background, and there's no Discord involved on the customer's side at all. API key auth, configurable scopes, per-key rate limits, and webhooks for every event.</p>
+
+<div class="flow">
+<div class="flow-lbl">How a reseller's website uses the API</div>
+<div class="states">
+  <span class="st b">Customer places order on reseller's site</span>
+  <span class="arr">→</span>
+  <span class="st b">Reseller site calls POST /v1/tasks</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st b">Platform runs checkout in background</span>
+  <span class="arr">→</span>
+  <span class="st g">Webhook fires: order.confirmed</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st g">Reseller site receives webhook</span>
+  <span class="arr">→</span>
+  <span class="st g">Customer sees "Order placed" — done</span>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BILLING
+════════════════════════════════════════════ -->
+<section id="billing">
+<div class="s-eye">What We Can Build</div>
+<h2>Card Management</h2>
+<h3>The format you specified works exactly as-is</h3>
+<p>Cards come in like this:</p>
+<div class="card" style="font-family:var(--mono);font-size:12px;color:var(--tx2);line-height:2;padding:16px 20px">
+  <code style="font-size:13px;color:var(--gn);background:none;border:none;padding:0">4100390141008470|11/26|786|Mae I Tenorio|78 W 9th Ave|Apt G|hollywood|Florida|61704</code><br>
+  <span style="color:var(--tx3);font-size:11px">CardNumber | Expiry | CVV | Name | Address | Line2 | City | State | Zip</span>
+</div>
+<p>Card numbers are encrypted before they hit the database and never written to logs or error messages anywhere in the system. Last four digits and brand are stored separately for display.</p>
+
+<h3>Bulk add, cycling, management</h3>
+<ul class="plain">
+  <li>Bulk add via CSV — paste a list, platform parses and imports all at once</li>
+  <li>Cards assigned to profiles in a priority order you configure</li>
+  <li>On payment decline, the engine automatically tries the next card in the profile — no manual action</li>
+  <li>Failed cards are tracked (decline count per retailer) so you know which ones to replace</li>
+  <li>Add, edit, remove individual cards or clear a profile's card list</li>
+  <li>Card status tracking: Active, Declined, Verification Pending, Blocked</li>
+</ul>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PROXIES
+════════════════════════════════════════════ -->
+<section id="proxies">
+<div class="s-eye">What We Can Build</div>
+<h2>Proxy Support</h2>
+<p>Whatever format your provider gives you, paste it in. The platform normalises everything to one internal format — you don't need to reformat anything.</p>
+
+<div class="card">
+  <div class="card-eye card-eye-bl">All of these work</div>
+  <div style="font-family:var(--mono);font-size:12px;line-height:2.2;color:var(--tx2)">
+    <div><span style="color:var(--tx3)">basic:</span>   host:port</div>
+    <div><span style="color:var(--tx3)">authed:</span>  host:port:username:password</div>
+    <div><span style="color:var(--tx3)">URL:</span>     http://username:password@host:port</div>
+    <div><span style="color:var(--tx3)">SOCKS5:</span>  socks5://username:password@host:port</div>
+    <div><span style="color:var(--tx3)">session:</span> uorder47902_fastmode-true_session-9h7qpx8l0v_sesstime-5:mfiyGQTLyqHwoV1W@budget.legionproxy.io:1337</div>
+  </div>
+</div>
+
+<ul class="plain">
+  <li>Bulk import — paste a list, all formats accepted in the same batch</li>
+  <li>Health checking every 5 minutes — latency measured, unhealthy proxies flagged automatically</li>
+  <li>Assign proxies to a tenant pool, a specific profile, or an individual task</li>
+  <li>Round-robin rotation or sticky (same proxy for the whole session) — configurable per retailer</li>
+  <li>Failed proxy on a task → task requeued with the next healthy proxy automatically</li>
+</ul>
+
+<div class="callout callout-am">
+<strong>Proxy quality note</strong>
+The platform health-checks and routes around bad proxies — but it cannot make a low-quality proxy pool perform like a residential one. For retailers that aggressively block datacenter IP ranges, residential or ISP proxies will give significantly better success rates. The platform works with whatever you provide, but performance reflects the pool quality.
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     RETAILERS
+════════════════════════════════════════════ -->
+<section id="retailers">
+<div class="s-eye">What We Can Build</div>
+<h2>Retailer Integrations</h2>
+<p>Each retailer is its own module. When one breaks or changes, it gets fixed in isolation — nothing else is touched. The 12 direct stores go first because they're simpler and let us prove out the full checkout flow before getting into Uber Eats and Instacart.</p>
+
+<div class="retailer-grid">
+  <div class="rc"><span class="type">Direct</span><span class="name">Shake Shack</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Whataburger</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Wingstop</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Buffalo Wild Wings</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Panda Express</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Five Guys</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Jersey Mike's</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Applebee's</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">IHOP</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Domino's</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Wawa</span></div>
+  <div class="rc"><span class="type">Direct</span><span class="name">Insomnia Cookies</span></div>
+  <div class="rc"><span class="type">Aggregator</span><span class="name">Uber Eats</span></div>
+  <div class="rc"><span class="type">Aggregator</span><span class="name">Instacart</span></div>
+</div>
+
+<h3>How each one gets built</h3>
+<p>Before touching any code for a retailer, we walk through their checkout manually, record the network traffic, work out what bot detection they're running and where CAPTCHA shows up, and document the whole payment flow. That becomes the spec the code is written against. No guessing.</p>
+<p>The first few take longer to set up. By the time we've done four or five, the pace picks up significantly — the pattern is established and the team knows what to look for.</p>
+<p>We start with Domino's and Shake Shack. Both have clean checkout flows that let us validate the engine before going near anything with heavy protection. Buffalo Wild Wings, Uber Eats, and Instacart come later once the foundation is solid.</p>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     INSTACART
+════════════════════════════════════════════ -->
+<section id="instacart-section">
+<div class="s-eye">What We Can Build</div>
+<h2>Instacart — Including Promotional Account Support</h2>
+<p>Instacart is the most technically involved integration in the scope. You're right that it's possible — a small number of existing tools do it — and you're also right that the promotional account path (using credits or promo balances instead of or alongside a card) is key to making it work efficiently for your use case. Here's how we approach it.</p>
+
+<h3>The promotional account path</h3>
+<p>Instacart accounts that carry promotional credit or a pre-loaded balance have a different checkout path than standard card accounts. Instead of — or in addition to — entering a card, the checkout applies the available credit first, then handles any remaining balance. The platform detects which payment path the account is showing and handles each one automatically:</p>
+
+<div class="flow">
+<div class="flow-lbl">Instacart payment path detection</div>
+<div class="states">
+  <span class="st b">Reach payment step</span>
+  <span class="arr">→</span>
+  <span class="st b">Detect which UI is shown</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st g">Credit covers full amount</span>
+  <span class="arr">→</span>
+  <span class="st g">No card needed — submit directly</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st a">Partial credit + card needed</span>
+  <span class="arr">→</span>
+  <span class="st a">Apply credit → enter card for remainder</span>
+</div>
+<div class="states" style="margin-top:8px">
+  <span class="st b">No credit — standard card</span>
+  <span class="arr">→</span>
+  <span class="st b">Normal card cycling path</span>
+</div>
+</div>
+
+<p>To build this correctly, we need to walk through the flow on the specific account type you'll be using. The structure is built and ready — the exact UI selectors and payment logic are confirmed during the discovery session with you before implementation begins.</p>
+
+<h3>What we need from you before the Instacart build starts</h3>
+<ul class="plain">
+  <li>Access to a working Instacart account for the discovery session (the one with the promotional/credit setup you described)</li>
+  <li>Confirmation of whether the account is standard, Instacart+, or a business account</li>
+  <li>A walkthrough of a sample order so we can see the exact payment screen the account shows</li>
+  <li>Your preference on store selection — specific stores, or best-match for the delivery address?</li>
+</ul>
+
+<div class="callout callout-am">
+<strong>Instacart discovery is scheduled last for a reason</strong>
+Everything else in the platform can be built and running while the Instacart discovery session is being arranged. The discovery session is not a blocker for the rest of the project — it's a prerequisite for that specific module only.
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     ADVANCED CAPABILITIES
+════════════════════════════════════════════ -->
+<section id="advanced-caps">
+<div class="s-eye">What We Can Build</div>
+<h2>Advanced Capabilities Built Into the Core</h2>
+<p>These aren't features that get added later — they're baked into the engine design from the start. You asked about them specifically and they're confirmed scope.</p>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-eye card-eye-bl">CAPTCHA &amp; Verification</div>
+    <h3>Auto-solve with user fallback</h3>
+    <p>The engine detects CAPTCHA challenges and attempts to solve them automatically using 2Captcha and CapSolver. If automation fails, the checkout pauses and the user gets a Discord DM with a link to resolve it manually. Once resolved, checkout resumes from exactly where it stopped. The same mechanism handles 3DS payment verification.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-gn">Anti-Detection</div>
+    <h3>Browser session management</h3>
+    <p>Every checkout runs in an isolated browser session with a consistent fingerprint — realistic canvas rendering, WebGL signals, screen dimensions, user agent, timezone, and behaviour patterns. Sessions are health-checked throughout the checkout; a session that shows signs of detection is automatically recreated before continuing.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-am">Rate Limiting</div>
+    <h3>Automatic backoff and recovery</h3>
+    <p>When a retailer rate-limits a request, the platform classifies it correctly, puts the retailer into a cooldown window (all workers are aware), requeues the task with exponential backoff, and resumes automatically when the window clears. The user doesn't need to do anything. Rate limits are not failures — they're managed states.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-gn">Full Audit Trail</div>
+    <h3>Every event recorded</h3>
+    <p>Every state transition across every checkout task is recorded — CAPTCHA detected, CAPTCHA solved, payment declined, card cycled, order confirmed, and so on. This makes troubleshooting straightforward and gives you a clear picture of where any given order stands or why it failed.</p>
+  </div>
+</div>
+</section>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════
+     WHAT WE CAN'T PROMISE
+════════════════════════════════════════════ -->
+<section id="cant-promise">
+<div class="s-eye">What We Can't Promise</div>
+<h2>What We Can't Promise</h2>
+<p>Most project documents skip this part. We're not going to, because finding out later is worse than knowing now.</p>
+
+<div class="card">
+  <div class="card-eye card-eye-am">Retailer sites change</div>
+  <h3>A checkout flow that works today can break tomorrow</h3>
+  <p>Any of these retailers can push a site update that moves a button, changes a field, or adds a new verification step. When that happens, the integration for that retailer stops working until it's fixed. That's just the reality of automating against sites you don't control.</p>
+  <p>The monitoring catches it fast — a failure rate spike per retailer is visible within minutes, not days. Each retailer is its own self-contained module so the fix is scoped. The question is always how significant the change was: a selector tweak is an hour, a full flow overhaul takes longer.</p>
+</div>
+
+<div class="card">
+  <div class="card-eye card-eye-am">Bot detection evolves</div>
+  <h3>Stealth config works at launch — some retailers will update theirs</h3>
+  <p>Every integration gets tuned against the retailer's detection before it goes live. That holds until the retailer updates their detection — which some do on a schedule, and others do reactively based on traffic patterns. We can't know when or how significant it'll be until it happens.</p>
+  <p>Nightly regression tests catch it the morning after, not from user reports. The fix is per-retailer — nothing else gets touched. But this is ongoing work, not a one-time setup. Anyone who tells you otherwise isn't being straight with you.</p>
+</div>
+
+<div class="card">
+  <div class="card-eye card-eye-am">CAPTCHA auto-solve has limits</div>
+  <h3>The common types get handled automatically — not all of them, every time</h3>
+  <p>reCAPTCHA, hCaptcha, Turnstile — solved automatically most of the time via 2Captcha and CapSolver. But harder difficulty settings or newer challenge types can beat the solver. When that happens, the checkout pauses and the user gets a DM to handle it manually. It takes a couple of minutes and checkout picks back up automatically once they confirm.</p>
+  <p>Solve rates are tracked per retailer. If something starts failing at a higher rate, it shows in the data and gets addressed. We're not going to say it's always automatic, because it isn't.</p>
+</div>
+
+<div class="card">
+  <div class="card-eye card-eye-rd">Uber Eats is the most complex one</div>
+  <h3>Other ACOs do it — but it needs the most ongoing attention after launch</h3>
+  <p>Uber Eats needs a logged-in account, handles location-based store availability, has its own detection layer, and adds tip and fee logic on top of standard checkout. It's doable — the competition does it — but it's the integration most likely to need patches post-launch. It gets built last, after the stealth and session infrastructure is already proven on the direct retailers, which helps. Conservative concurrency limits on Uber Eats specifically reduce the detection surface.</p>
+</div>
+
+<div class="card">
+  <div class="card-eye card-eye-am">Instacart's promo flow needs your account to confirm</div>
+  <h3>We've built the structure — the exact logic depends on what your account shows</h3>
+  <p>Instacart's payment step looks different depending on account type, membership status, and active promotions. The adapter is built to detect which path it's on at runtime and handle it — but we need to walk through your specific account before we can wire in the right selectors and confirm the flow. That's what the discovery session is for. Everything else can be running while we arrange it.</p>
+</div>
+</section>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════
+     DAILY OPS — WHAT GOES WRONG
+════════════════════════════════════════════ -->
+<section id="daily-ops">
+<div class="s-eye">Day-to-Day Reality</div>
+<h2>What Will Go Wrong &amp; When</h2>
+<p>Things will break. Below is what to expect, roughly how often, and what happens when each one does. Most of these are handled automatically — the ones that need a human are clearly marked.</p>
+
+<div style="background:var(--s1);border:1px solid var(--brd);border-radius:8px;overflow:hidden;margin:20px 0">
+  <div class="ops-row">
+    <div class="ops-cell hd">What happens</div>
+    <div class="ops-cell hd">How often to expect it</div>
+    <div class="ops-cell hd">First response</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>Retailer updates their checkout UI</b><br>A button selector breaks, the flow stalls</div>
+    <div class="ops-cell">1–3 times per retailer per quarter on average. More frequently for larger chains that iterate faster.</div>
+    <div class="ops-cell"><span class="fix">GRAFANA ALERT: failure rate spike</span><br>Nightly test fails for that retailer. Fix is scoped to one module — other retailers unaffected. Priority patch shipped.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>CAPTCHA auto-solve fails</b><br>Solver returns wrong token or times out</div>
+    <div class="ops-cell">Small percentage of tasks on CAPTCHA-heavy retailers. Auto-solve has a high success rate but not perfect.</div>
+    <div class="ops-cell"><span class="fix">AUTO: falls back to user-assist</span><br>User gets Discord DM. They open the dashboard, confirm resolution, checkout resumes automatically.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>Rate limited by a retailer</b><br>Too many requests in a short window</div>
+    <div class="ops-cell">Periodic, especially during high-volume periods. More likely on retailers with tighter limits.</div>
+    <div class="ops-cell"><span class="fix">AUTO: backoff + requeue</span><br>No user action needed. Retailer enters cooldown, task requeued with delay, resumes automatically when window clears.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>Retailer upgrades bot detection</b><br>Sessions start getting blocked or flagged</div>
+    <div class="ops-cell">Unpredictable — could be months between updates or could be triggered by usage patterns.</div>
+    <div class="ops-cell"><span class="fix">GRAFANA ALERT: block rate increase</span><br>Per-retailer stealth config updated. Session fingerprint adjusted. Nightly test validates fix before it goes to production.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>Card declined at checkout</b><br>Issuer or retailer rejects the card</div>
+    <div class="ops-cell">Normal occurrence — depends on the quality of the card pool.</div>
+    <div class="ops-cell"><span class="fix">AUTO: cycle to next card</span><br>Engine moves to the next card in the profile automatically. User notified by Discord DM. If all cards exhausted, task fails with clear reason.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>Proxy pool quality drops</b><br>Proxies start timing out or being blocked</div>
+    <div class="ops-cell">Depends entirely on proxy provider reliability. Residential proxies are more stable.</div>
+    <div class="ops-cell"><span class="fix">AUTO: health check flags bad proxies</span><br>Unhealthy proxies are removed from rotation automatically. Dashboard shows proxy health ratio. User replaces poor proxies.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>Instacart session expires</b><br>Login session no longer valid</div>
+    <div class="ops-cell">Every 6–12 hours depending on Instacart's session policy. More often if account is flagged for unusual activity.</div>
+    <div class="ops-cell"><span class="fix">AUTO: re-login on next task</span><br>Platform detects expired session, logs in fresh, saves new session, continues. User sees no interruption unless login fails.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>A retailer closes or changes their ordering system</b><br>e.g. moves to a third-party platform</div>
+    <div class="ops-cell">Low frequency but it happens — especially with smaller chains or those that change delivery partners.</div>
+    <div class="ops-cell"><span class="fix">ASSESSMENT + REDEVELOPMENT</span><br>Discovery re-run on the new ordering system. If it's a recognisable platform (e.g. Olo), may be faster to adapt. Timeline depends on complexity.</div>
+  </div>
+  <div class="ops-row">
+    <div class="ops-cell"><b>Uber Eats changes account requirements or adds new verification</b></div>
+    <div class="ops-cell">Periodic. Uber invests heavily in fraud detection and updates it frequently.</div>
+    <div class="ops-cell"><span class="fix">SESSION INVALIDATION + RE-TUNE</span><br>Session invalidated, fresh login, stealth config reviewed. Uber Eats has conservative concurrency limits already set to reduce detection surface.</div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     QUICK-FIX PLAYBOOK
+════════════════════════════════════════════ -->
+<section id="quick-fixes">
+<div class="s-eye">Day-to-Day Reality</div>
+<h2>Quick-Fix Playbook</h2>
+<p>For the most common issues — how fast each gets resolved and what the path is.</p>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-eye card-eye-gn">Fix time: minutes</div>
+    <h3>Selector breaks for one retailer</h3>
+    <p>Each retailer's selectors live in a single <code>selectors.ts</code> file for that retailer module. Update the selector, push the change, the worker picks it up on next restart. No other retailers are touched. This is the most common maintenance task and intentionally designed to be fast.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-gn">Fix time: automatic</div>
+    <h3>Rate limit or temporary block</h3>
+    <p>Fully automatic. The error classifier identifies the rate limit, sets a cooldown key in Redis, requeues the task with the appropriate delay. When the cooldown expires, the task runs again. Zero human intervention required unless the rate limit is sustained for an unusually long time.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-am">Fix time: user action</div>
+    <h3>CAPTCHA that auto-solve can't handle</h3>
+    <p>User receives a Discord DM with a link to the task in the dashboard. They open the page, the CAPTCHA is shown, they solve it manually in the browser, click "Done" — the checkout resumes automatically from that point. Total user time: typically under two minutes.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-gn">Fix time: automatic</div>
+    <h3>Card declined</h3>
+    <p>Engine moves to the next card in the profile without stopping. User gets a Discord DM notification that a card was declined and which one (by last 4 digits) so they know which card to replace. If all cards are exhausted, the task fails and the user is notified with the specific reason.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-am">Fix time: hours to a day</div>
+    <h3>Retailer bot detection update</h3>
+    <p>Grafana alerts on increased block rate for the affected retailer. Developer reviews the detection pattern, updates fingerprint config or session behaviour for that retailer specifically. Nightly regression test validates the fix before it's pushed to production.</p>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-gn">Fix time: automatic</div>
+    <h3>Worker process crashes</h3>
+    <p>The supervisor process automatically detects a crashed worker and spawns a replacement. In-progress tasks that were interrupted are requeued. Average downtime per worker crash: under 2 seconds. This is by design — individual worker crashes don't affect the queue or other workers.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MONITORING
+════════════════════════════════════════════ -->
+<section id="monitoring-ops">
+<div class="s-eye">Day-to-Day Reality</div>
+<h2>How Issues Get Caught</h2>
+<p>The platform doesn't wait for users to report problems. Everything is monitored and most issues surface automatically before they affect more than a handful of tasks.</p>
+
+<div class="g2">
+  <div class="mc">
+    <div class="mc-t mc-t-bl">Real-time Grafana dashboard shows</div>
+    <ul class="mc">
+      <li>Checkout success / failure rate per retailer</li>
+      <li>Queue depth — how many tasks are waiting</li>
+      <li>Active worker count and health</li>
+      <li>Rate-limit events per retailer per minute</li>
+      <li>CAPTCHA solve success rate by type</li>
+      <li>Proxy health ratio per tenant</li>
+      <li>Memory usage per worker (auto-restart at threshold)</li>
+      <li>Webhook delivery success rate</li>
+    </ul>
+  </div>
+  <div class="mc">
+    <div class="mc-t mc-t-am">Automatic alerts fire when</div>
+    <ul class="mc">
+      <li>Failure rate for any retailer exceeds 20% over 10 minutes</li>
+      <li>Any retailer's rate-limit events spike above threshold</li>
+      <li>Queue depth for any retailer grows unusually large</li>
+      <li>All proxies for a tenant become unhealthy</li>
+      <li>Any worker's memory exceeds 400 MB</li>
+      <li>Nightly regression test fails for a retailer</li>
+      <li>Webhook delivery failure rate rises above 50%</li>
+    </ul>
+  </div>
+</div>
+
+<div class="callout callout-bl">
+Every retailer runs a full automated checkout test every night against a real test account. If an integration broke overnight, it shows up in the morning before any real users hit it. That nightly test is probably the most useful single thing in the whole platform from an ops standpoint — it catches the majority of breakages before they matter.
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     NEXT STEPS
+════════════════════════════════════════════ -->
+<section id="next-steps">
+<div class="s-eye">Getting Started</div>
+<h2>What We Need From You</h2>
+<p>The platform core — infrastructure, API, Discord bot, card and proxy management, checkout engine — can start right now with no dependencies on you. The retailer integrations are where we need your involvement.</p>
+
+<div class="g2">
+  <div class="card">
+    <div class="card-eye card-eye-gn">Starting immediately, no blockers</div>
+    <ul class="plain">
+      <li>Platform infrastructure and database</li>
+      <li>Auth, API, Discord bot</li>
+      <li>Card and proxy management</li>
+      <li>Checkout engine</li>
+      <li>Browser and session layer</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-eye card-eye-am">Needed from you to unblock retailers</div>
+    <ul class="plain">
+      <li>Test accounts for each direct retailer — one per store for the discovery walkthrough</li>
+      <li>Test cards for checkout validation (small real orders)</li>
+      <li>Instacart account — the one with the promotional/credit setup</li>
+      <li>Uber Eats account for the discovery session</li>
+      <li>Proxy pool for testing — residential IPs preferred for retailer work</li>
+    </ul>
+  </div>
+</div>
+
+<p>The two ACOs you're currently using are worth keeping access to while this is being built. They're a useful reference for the Discord bot UX specifically — what commands feel right, how embeds are structured, what notifications users expect. We'll refer to them directly during that part of the build.</p>
+</section>
+
+</main>
+</div>
+
+<script>
+const secs = document.querySelectorAll('section[id]')
+const links = document.querySelectorAll('.sidebar nav a')
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => l.classList.remove('on'))
+      const a = document.querySelector(`.sidebar nav a[href="#${e.target.id}"]`)
+      if (a) a.classList.add('on')
+    }
+  })
+}, { rootMargin: '-12% 0px -80% 0px' })
+secs.forEach(s => obs.observe(s))
+</script>
+</body>
+</html>
